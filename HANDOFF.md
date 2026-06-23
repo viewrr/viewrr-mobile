@@ -43,6 +43,8 @@ focus = scale 1.06 + ring) into the Compose theme so web and mobile stay in visu
 - **Playback** uses a **per-device stremio-key** (long-lived) in the stream URL path.
 
 ## API contract — COORDINATE WITH BACKEND AGENT
+
+**v0 contract is now written:** [`docs/api/client-api.md`](https://github.com/viewrr/viewrr/blob/main/docs/api/client-api.md) in `viewrr/viewrr`. Build against it (✅ exists vs 🔜 gap). File issues for missing pieces.
 The viewrr client REST API is **not finalized**. The server today exposes a Stremio addon
 (`/stremio/{key}/...`), HLS stream routes, `/auth/*`, and assorted REST. A clean client API
 is the **backend agent's** deliverable. Read `viewrr/viewrr`
