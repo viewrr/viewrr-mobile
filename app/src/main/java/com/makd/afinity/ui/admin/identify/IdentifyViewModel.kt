@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.makd.afinity.data.models.admin.ExternalIdProvider
 import com.makd.afinity.data.models.admin.IdentifyResult
 import com.makd.afinity.data.repository.admin.AdminRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +26,6 @@ data class IdentifyUiState(
     val error: String? = null,
 )
 
-@HiltViewModel
 class IdentifyViewModel
 @Inject
 constructor(

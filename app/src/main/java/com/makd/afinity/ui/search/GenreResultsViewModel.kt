@@ -18,8 +18,6 @@ import com.makd.afinity.data.models.media.AfinityItem
 import com.makd.afinity.data.models.media.AfinitySeason
 import com.makd.afinity.data.repository.AppDataRepository
 import com.makd.afinity.data.repository.media.MediaRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,11 +34,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class GenreResultsViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val mediaRepository: MediaRepository,
     private val appDataRepository: AppDataRepository,
     private val adminChangeBroadcaster: AdminChangeBroadcaster,

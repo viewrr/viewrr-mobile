@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.makd.afinity.R
 import com.makd.afinity.data.repository.AudiobookshelfRepository
 import com.makd.afinity.data.repository.PreferencesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,11 +14,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-@HiltViewModel
 class AudiobookshelfLoginViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val audiobookshelfRepository: AudiobookshelfRepository,
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {

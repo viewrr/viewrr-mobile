@@ -1,27 +1,21 @@
 package com.makd.afinity.data.workers
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.makd.afinity.data.repository.AudiobookshelfRepository
 import com.makd.afinity.data.repository.audiobookshelf.AbsProgressSyncScheduler
-import dagger.Lazy
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
 
-@HiltWorker
 class AbsProgressSyncWorker
-@AssistedInject
 constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters,
-    private val audiobookshelfRepository: Lazy<AudiobookshelfRepository>,
+    appContext: Context,
+    workerParams: WorkerParameters,
+    private val audiobookshelfRepository: AudiobookshelfRepository,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -39,7 +33,7 @@ constructor(
         }
 
         Timber.d("AbsProgressSync: syncing pending progress for serverId=$serverId")
-        val result = audiobookshelfRepository.get().syncPendingProgress(serverId, userId)
+        val result = audiobookshelfRepository.syncPendingProgress(serverId, userId)
         return@withContext when {
             result.isSuccess -> {
                 Timber.d("AbsProgressSync: synced ${result.getOrDefault(0)} items")

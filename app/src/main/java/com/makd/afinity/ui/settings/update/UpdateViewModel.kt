@@ -11,8 +11,6 @@ import com.makd.afinity.data.updater.UpdateScheduler
 import com.makd.afinity.data.updater.models.GitHubRelease
 import com.makd.afinity.data.updater.models.UpdateCheckFrequency
 import com.makd.afinity.data.updater.models.UpdateState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,11 +21,10 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-@HiltViewModel
 class UpdateViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val updateManager: UpdateManager,
     private val updateScheduler: UpdateScheduler,
     private val preferencesRepository: PreferencesRepository,

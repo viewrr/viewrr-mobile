@@ -21,7 +21,6 @@ import com.makd.afinity.data.models.player.SubtitlePreferences
 import com.makd.afinity.data.models.player.SubtitleVerticalPosition
 import com.makd.afinity.data.models.player.VideoZoomMode
 import com.makd.afinity.data.repository.PreferencesRepository
-import com.makd.afinity.di.AppPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -33,7 +32,7 @@ import javax.inject.Singleton
 @Singleton
 class PreferencesRepositoryImpl
 @Inject
-constructor(@param:AppPreferences private val dataStore: DataStore<Preferences>) :
+constructor(private val dataStore: DataStore<Preferences>) :
     PreferencesRepository {
 
     private object Keys {

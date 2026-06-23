@@ -14,7 +14,6 @@ import com.makd.afinity.data.syncplay.SyncPlayGroupUpdate
 import com.makd.afinity.data.syncplay.SyncPlayRawWebSocket
 import com.makd.afinity.data.syncplay.SyncPlayTimeSyncEngine
 import com.makd.afinity.data.websocket.JellyfinWebSocketManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -78,7 +77,6 @@ sealed class SyncPlayEffect {
     ) : SyncPlayEffect()
 }
 
-@HiltViewModel
 class SyncPlayViewModel
 @Inject
 constructor(

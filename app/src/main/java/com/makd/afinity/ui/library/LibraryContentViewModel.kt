@@ -18,8 +18,6 @@ import com.makd.afinity.data.models.media.AfinityItem
 import com.makd.afinity.data.repository.AppDataRepository
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.repository.media.MediaRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -44,11 +42,10 @@ enum class FilterType {
 }
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class LibraryContentViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val mediaRepository: MediaRepository,
     private val appDataRepository: AppDataRepository,
     private val adminChangeBroadcaster: AdminChangeBroadcaster,

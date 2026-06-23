@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.makd.afinity.data.repository.AudiobookshelfRepository
 import com.makd.afinity.data.repository.audiobookshelf.AbsProgressSyncScheduler
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +19,7 @@ import javax.inject.Singleton
 class AudiobookshelfProgressSyncer
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val audiobookshelfRepository: AudiobookshelfRepository,
     private val playbackManager: AudiobookshelfPlaybackManager,
     private val absSyncScheduler: AbsProgressSyncScheduler,

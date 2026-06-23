@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import android.os.storage.StorageManager
 import com.makd.afinity.data.storage.StorageLocationProvider.Companion.PRIMARY_VOLUME_ID
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -21,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class StorageLocationProvider
 @Inject
-constructor(@param:ApplicationContext private val context: Context) {
+constructor(private val context: Context) {
 
     companion object {
         const val PRIMARY_VOLUME_ID = "primary"

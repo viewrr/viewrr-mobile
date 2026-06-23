@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.data.models.jellyseerr.Permissions
@@ -60,8 +60,8 @@ fun FilteredMediaScreen(
     mainUiState: MainUiState,
     onItemClick: (jellyfinItemId: String, itemType: String?) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: FilteredMediaViewModel = hiltViewModel(),
-    requestsViewModel: RequestsViewModel = hiltViewModel(),
+    viewModel: FilteredMediaViewModel = koinViewModel(),
+    requestsViewModel: RequestsViewModel = koinViewModel(),
     widthSizeClass: WindowWidthSizeClass,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

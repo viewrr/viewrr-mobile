@@ -69,7 +69,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.data.manager.OfflineModeManager
@@ -88,7 +88,7 @@ fun DownloadSettingsScreen(
     onBackClick: () -> Unit,
     onNavigateToAbsItem: (libraryItemId: String) -> Unit = {},
     modifier: Modifier = Modifier,
-    viewModel: DownloadsViewModel = hiltViewModel(),
+    viewModel: DownloadsViewModel = koinViewModel(),
     offlineModeManager: OfflineModeManager,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

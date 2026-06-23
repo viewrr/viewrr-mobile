@@ -60,7 +60,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.makd.afinity.R
@@ -71,7 +71,7 @@ import com.makd.afinity.data.models.admin.IdentifyResult
 fun IdentifyScreen(
     onNavigateUp: () -> Unit,
     onApplySuccess: () -> Unit = onNavigateUp,
-    viewModel: IdentifyViewModel = hiltViewModel(),
+    viewModel: IdentifyViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

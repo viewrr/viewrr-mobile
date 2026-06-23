@@ -38,7 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -101,8 +101,8 @@ val LocalShowRatings = compositionLocalOf { true }
 @Composable
 fun MainNavigation(
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = hiltViewModel(),
-    viewModel: MainNavigationViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = koinViewModel(),
+    viewModel: MainNavigationViewModel = koinViewModel(),
     updateManager: UpdateManager,
     offlineModeManager: OfflineModeManager,
     widthSizeClass: WindowWidthSizeClass,
@@ -110,14 +110,14 @@ fun MainNavigation(
     val mainUiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     val favoritesCount by viewModel.favoritesCount.collectAsStateWithLifecycle()
     val watchlistRepository: WatchlistRepository =
-        hiltViewModel<MainNavigationViewModel>().watchlistRepository
+        koinViewModel<MainNavigationViewModel>().watchlistRepository
     val watchlistCount by watchlistRepository.watchlistCountFlow.collectAsStateWithLifecycle()
     val jellyseerrRepository: JellyseerrRepository =
-        hiltViewModel<MainNavigationViewModel>().jellyseerrRepository
+        koinViewModel<MainNavigationViewModel>().jellyseerrRepository
     val isJellyseerrAuthenticated by
         jellyseerrRepository.isAuthenticated.collectAsStateWithLifecycle()
     val audiobookshelfRepository: AudiobookshelfRepository =
-        hiltViewModel<MainNavigationViewModel>().audiobookshelfRepository
+        koinViewModel<MainNavigationViewModel>().audiobookshelfRepository
     val isAudiobookshelfAuthenticated by
         audiobookshelfRepository.isAuthenticated.collectAsStateWithLifecycle()
     val hasLiveTvAccess by viewModel.hasLiveTvAccess.collectAsStateWithLifecycle()

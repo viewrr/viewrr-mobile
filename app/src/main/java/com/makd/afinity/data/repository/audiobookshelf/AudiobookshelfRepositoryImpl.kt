@@ -39,7 +39,6 @@ import com.makd.afinity.data.repository.ItemWithProgress
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.SeriesItemsResult
 import com.makd.afinity.util.NetworkConnectivityMonitor
-import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -66,7 +65,7 @@ import javax.inject.Singleton
 class AudiobookshelfRepositoryImpl
 @Inject
 constructor(
-    private val apiService: Lazy<AudiobookshelfApiService>,
+    private val apiService: AudiobookshelfApiService,
     private val securePreferencesRepository: SecurePreferencesRepository,
     private val database: AfinityDatabase,
     private val networkConnectivityMonitor: NetworkConnectivityMonitor,
@@ -280,7 +279,7 @@ constructor(
                 )
 
                 val loginRequest = LoginRequest(username, password)
-                val response = apiService.get().login(loginRequest)
+                val response = apiService.login(loginRequest)
 
                 if (response.isSuccessful && response.body() != null) {
                     val loginResponse = response.body()!!
@@ -423,7 +422,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().authorize()
+                val response = apiService.authorize()
                 if (response.isSuccessful && response.body() != null) {
                     Result.success(true)
                 } else {
@@ -473,7 +472,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getLibraries()
+                val response = apiService.getLibraries()
 
                 if (response.isSuccessful && response.body() != null) {
                     val libraries = response.body()!!.libraries
@@ -515,7 +514,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getLibrary(libraryId)
+                val response = apiService.getLibrary(libraryId)
 
                 if (response.isSuccessful && response.body()?.library != null) {
                     Result.success(response.body()!!.library!!)
@@ -536,7 +535,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getLibraryStats(libraryId)
+                val response = apiService.getLibraryStats(libraryId)
 
                 if (response.isSuccessful && response.body() != null) {
                     Result.success(response.body()!!)
@@ -586,7 +585,6 @@ constructor(
                 while (totalFetched < total) {
                     val response =
                         apiService
-                            .get()
                             .getLibraryItems(
                                 id = libraryId,
                                 limit = limit,
@@ -692,7 +690,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getItem(itemId)
+                val response = apiService.getItem(itemId)
 
                 if (response.isSuccessful && response.body() != null) {
                     val itemResponse = response.body()!!
@@ -731,7 +729,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().search(libraryId, query, limit = 25)
+                val response = apiService.search(libraryId, query, limit = 25)
 
                 if (response.isSuccessful && response.body() != null) {
                     Result.success(response.body()!!)
@@ -764,7 +762,6 @@ constructor(
                 while (totalFetched < total) {
                     val response =
                         apiService
-                            .get()
                             .getSeries(id = libraryId, limit = limit, page = currentPage)
 
                     if (response.isSuccessful && response.body() != null) {
@@ -818,7 +815,6 @@ constructor(
 
                 val response =
                     apiService
-                        .get()
                         .getLibraryItems(
                             id = libraryId,
                             limit = limit,
@@ -849,7 +845,6 @@ constructor(
 
                 val response =
                     apiService
-                        .get()
                         .getPersonalized(
                             id = libraryId,
                             limit = 15,
@@ -904,7 +899,7 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getItemsInProgress()
+                val response = apiService.getItemsInProgress()
 
                 if (response.isSuccessful && response.body() != null) {
                     val items = response.body()!!.libraryItems
@@ -917,7 +912,7 @@ constructor(
                     }
 
                     try {
-                        val meResponse = apiService.get().getMe()
+                        val meResponse = apiService.getMe()
                         if (meResponse.isSuccessful && meResponse.body() != null) {
                             meResponse.body()!!.mediaProgress?.forEach { progress ->
                                 cacheProgress(progress)
@@ -963,9 +958,9 @@ constructor(
                     if (networkConnectivityMonitor.isCurrentlyConnected()) {
                         val response =
                             if (episodeId != null) {
-                                apiService.get().updateEpisodeProgress(itemId, episodeId, request)
+                                apiService.updateEpisodeProgress(itemId, episodeId, request)
                             } else {
-                                apiService.get().updateProgress(itemId, request)
+                                apiService.updateProgress(itemId, request)
                             }
                         response.isSuccessful
                     } else false
@@ -1152,9 +1147,9 @@ constructor(
 
                 val response =
                     if (episodeId != null) {
-                        apiService.get().startEpisodePlaybackSession(itemId, episodeId, request)
+                        apiService.startEpisodePlaybackSession(itemId, episodeId, request)
                     } else {
-                        apiService.get().startPlaybackSession(itemId, request)
+                        apiService.startPlaybackSession(itemId, request)
                     }
 
                 if (response.isSuccessful && response.body() != null) {
@@ -1208,7 +1203,7 @@ constructor(
                         progress = if (duration > 0) currentTime / duration else 0.0,
                     )
 
-                val response = apiService.get().syncPlaybackSession(sessionId, syncData)
+                val response = apiService.syncPlaybackSession(sessionId, syncData)
 
                 if (response.isSuccessful) {
                     Result.success(Unit)
@@ -1246,7 +1241,7 @@ constructor(
                         progress = if (duration > 0) currentTime / duration else 0.0,
                     )
 
-                val response = apiService.get().closePlaybackSession(sessionId, syncData)
+                val response = apiService.closePlaybackSession(sessionId, syncData)
 
                 if (response.isSuccessful) {
                     Result.success(Unit)
@@ -1272,7 +1267,7 @@ constructor(
                 }
 
                 val deferredResponses = libraryIds.map { libraryId ->
-                    async { apiService.get().getFilterData(libraryId) }
+                    async { apiService.getFilterData(libraryId) }
                 }
 
                 val responses = deferredResponses.awaitAll()
@@ -1323,7 +1318,6 @@ constructor(
                 while (totalFetched < total) {
                     val response =
                         apiService
-                            .get()
                             .getLibraryItems(
                                 id = libraryId,
                                 limit = 100,
@@ -1380,7 +1374,6 @@ constructor(
 
                 val response =
                     apiService
-                        .get()
                         .getLibraryItems(
                             id = libraryId,
                             limit = limit,
@@ -1451,7 +1444,7 @@ constructor(
                 }
 
                 val response =
-                    apiService.get().syncAllLocalSessions(BatchLocalSessionRequest(sessions))
+                    apiService.syncAllLocalSessions(BatchLocalSessionRequest(sessions))
                 Timber.d("syncPendingProgress: batch response ${response.code()}")
 
                 if (!response.isSuccessful) {
@@ -1603,7 +1596,7 @@ constructor(
     override suspend fun getListeningStats(): Result<ListeningStats> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getListeningStats()
+                val response = apiService.getListeningStats()
                 if (response.isSuccessful) {
                     Result.success(response.body() ?: ListeningStats())
                 } else {
@@ -1621,7 +1614,7 @@ constructor(
     ): Result<ListeningSessionsResponse> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getListeningSessions(itemsPerPage = itemsPerPage)
+                val response = apiService.getListeningSessions(itemsPerPage = itemsPerPage)
                 if (response.isSuccessful) {
                     Result.success(response.body() ?: ListeningSessionsResponse())
                 } else {
@@ -1726,7 +1719,7 @@ constructor(
                 "AudibleRating: fallback search title=$title author=$authorName region=$region"
             )
             val response =
-                apiService.get().searchCovers(title = title, author = authorName, region = region)
+                apiService.searchCovers(title = title, author = authorName, region = region)
             Timber.d(
                 "AudibleRating: fallback response code=${response.code()} body=${response.body()}"
             )

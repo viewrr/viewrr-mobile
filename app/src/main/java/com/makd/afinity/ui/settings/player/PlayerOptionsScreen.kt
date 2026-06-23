@@ -1,4 +1,6 @@
 package com.makd.afinity.ui.settings.player
+import com.makd.afinity.data.repository.PreferencesRepository
+import org.koin.compose.koinInject
 
 import android.graphics.Color
 import androidx.compose.animation.AnimatedVisibility
@@ -77,7 +79,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.core.graphics.toColorInt
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.data.models.player.MpvAudioOutput
@@ -89,10 +91,8 @@ import com.makd.afinity.data.models.player.SubtitleOutlineStyle
 import com.makd.afinity.data.models.player.SubtitlePreferences
 import com.makd.afinity.data.models.player.SubtitleVerticalPosition
 import com.makd.afinity.data.models.player.VideoZoomMode
-import com.makd.afinity.di.PreferencesEntryPoint
 import com.makd.afinity.navigation.LocalPlayerOffset
 import com.makd.afinity.ui.settings.SettingsViewModel
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -103,19 +103,12 @@ import kotlin.math.roundToInt
 fun PlayerOptionsScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
-    val context = LocalContext.current
-    val preferencesRepository = remember {
-        EntryPointAccessors.fromApplication(
-                context.applicationContext,
-                PreferencesEntryPoint::class.java,
-            )
-            .preferencesRepository()
-    }
+    val preferencesRepository = koinInject<PreferencesRepository>()
     val subtitlePrefs by
         preferencesRepository
             .getSubtitlePreferencesFlow()

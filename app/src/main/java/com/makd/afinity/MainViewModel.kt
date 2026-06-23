@@ -7,7 +7,6 @@ import com.makd.afinity.data.manager.PlaybackStateManager
 import com.makd.afinity.data.repository.AppDataRepository
 import com.makd.afinity.data.repository.auth.AuthRepository
 import com.makd.afinity.data.websocket.JellyfinWebSocketManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@HiltViewModel
 class MainViewModel
 @Inject
 constructor(

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.makd.afinity.data.models.audiobookshelf.LibraryItem
 import com.makd.afinity.data.repository.AudiobookshelfRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@HiltViewModel
 class AudiobookshelfGenreResultsViewModel
 @Inject
 constructor(private val audiobookshelfRepository: AudiobookshelfRepository) : ViewModel() {

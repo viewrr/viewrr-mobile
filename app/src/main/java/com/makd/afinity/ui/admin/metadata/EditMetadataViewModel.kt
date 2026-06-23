@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.makd.afinity.data.models.admin.EditableItem
 import com.makd.afinity.data.models.admin.EditablePerson
 import com.makd.afinity.data.repository.admin.AdminRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +22,6 @@ data class EditMetadataUiState(
     val error: String? = null,
 )
 
-@HiltViewModel
 class EditMetadataViewModel
 @Inject
 constructor(

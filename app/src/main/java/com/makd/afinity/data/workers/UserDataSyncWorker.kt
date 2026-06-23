@@ -1,14 +1,11 @@
 package com.makd.afinity.data.workers
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.makd.afinity.data.manager.SessionManager
 import com.makd.afinity.data.repository.DatabaseRepository
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jellyfin.sdk.api.client.extensions.userApi
@@ -16,12 +13,10 @@ import org.jellyfin.sdk.api.operations.ItemsApi
 import org.jellyfin.sdk.model.api.UpdateUserItemDataDto
 import timber.log.Timber
 
-@HiltWorker
 class UserDataSyncWorker
-@AssistedInject
 constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters,
+    appContext: Context,
+    workerParams: WorkerParameters,
     private val sessionManager: SessionManager,
     private val databaseRepository: DatabaseRepository,
 ) : CoroutineWorker(appContext, workerParams) {

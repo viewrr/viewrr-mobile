@@ -23,8 +23,6 @@ import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.server.ServerRepository
 import com.makd.afinity.util.isLocalAddress
 import com.makd.afinity.util.isTailscaleAddress
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -132,11 +130,10 @@ data class ServerWithUserCount(
     val audiobookshelfConnectionType: AddressType? = null,
 )
 
-@HiltViewModel
 class ServerManagementViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val sessionManager: SessionManager,
     private val offlineModeManager: OfflineModeManager,
     private val databaseRepository: DatabaseRepository,

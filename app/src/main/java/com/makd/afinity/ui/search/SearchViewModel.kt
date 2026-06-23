@@ -37,7 +37,6 @@ import com.makd.afinity.data.repository.media.MediaRepository
 import com.makd.afinity.data.repository.userdata.UserDataRepository
 import com.makd.afinity.ui.item.delegates.ItemUserDataDelegate
 import com.makd.afinity.util.NetworkConnectivityMonitor
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -64,7 +63,6 @@ import java.util.UUID
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class SearchViewModel
 @Inject
 constructor(

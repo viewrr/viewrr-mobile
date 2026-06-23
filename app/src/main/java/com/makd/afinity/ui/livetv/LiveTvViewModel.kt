@@ -8,8 +8,6 @@ import com.makd.afinity.data.models.livetv.AfinityChannel
 import com.makd.afinity.data.repository.livetv.LiveTvRepository
 import com.makd.afinity.ui.livetv.models.LiveTvCategory
 import com.makd.afinity.ui.livetv.models.ProgramWithChannel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -31,11 +29,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class LiveTvViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val liveTvRepository: LiveTvRepository,
 ) : ViewModel() {
 

@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.navigation.LocalPlayerOffset
@@ -51,7 +51,7 @@ fun ServerManagementScreen(
     onAddServerClick: () -> Unit,
     onEditServerClick: (serverId: String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ServerManagementViewModel = hiltViewModel(),
+    viewModel: ServerManagementViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()

@@ -26,7 +26,6 @@ import com.makd.afinity.data.repository.JellyseerrRepository
 import com.makd.afinity.data.repository.RequestEvent
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.util.NetworkConnectivityMonitor
-import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,7 +55,7 @@ import javax.inject.Singleton
 class JellyseerrRepositoryImpl
 @Inject
 constructor(
-    private val apiService: Lazy<JellyseerrApiService>,
+    private val apiService: JellyseerrApiService,
     private val securePreferencesRepository: SecurePreferencesRepository,
     private val database: AfinityDatabase,
     private val networkConnectivityMonitor: NetworkConnectivityMonitor,
@@ -202,10 +201,10 @@ constructor(
                 val response =
                     if (useJellyfinAuth) {
                         val jellyfinRequest = JellyfinLoginRequest(email, password)
-                        apiService.get().loginJellyfin(jellyfinRequest)
+                        apiService.loginJellyfin(jellyfinRequest)
                     } else {
                         val localRequest = LoginRequest(email, password)
-                        apiService.get().loginLocal(localRequest)
+                        apiService.loginLocal(localRequest)
                     }
 
                 if (response.isSuccessful && response.body() != null) {
@@ -316,7 +315,7 @@ constructor(
             try {
                 if (hasValidConfiguration() && networkConnectivityMonitor.isCurrentlyConnected()) {
                     try {
-                        apiService.get().logout()
+                        apiService.logout()
                     } catch (e: Exception) {
                         Timber.w(e, "Failed to logout from server, continuing with local cleanup")
                     }
@@ -348,7 +347,7 @@ constructor(
                 if (!networkConnectivityMonitor.isCurrentlyConnected()) {
                     return@withContext Result.failure(Exception("No network connection"))
                 }
-                val response = apiService.get().getCurrentUser()
+                val response = apiService.getCurrentUser()
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed to get current user: ${response.message()}"))
@@ -416,14 +415,14 @@ constructor(
                         profileId = profileId,
                         rootFolder = rootFolder,
                     )
-                val response = apiService.get().createRequest(requestBody)
+                val response = apiService.createRequest(requestBody)
 
                 if (response.isSuccessful && response.body() != null) {
                     val request = response.body()!!
 
                     val latestRequest =
                         try {
-                            val fetchResponse = apiService.get().getRequestById(request.id)
+                            val fetchResponse = apiService.getRequestById(request.id)
                             if (fetchResponse.isSuccessful && fetchResponse.body() != null)
                                 fetchResponse.body()!!
                             else request
@@ -460,7 +459,7 @@ constructor(
             try {
                 if (networkConnectivityMonitor.isCurrentlyConnected()) {
                     try {
-                        val response = apiService.get().getRequests(take, skip, filter)
+                        val response = apiService.getRequests(take, skip, filter)
                         if (response.isSuccessful && response.body() != null) {
                             val baseRequests = response.body()!!.results
 
@@ -520,11 +519,9 @@ constructor(
                                                         when (request.media.mediaType.lowercase()) {
                                                             "movie" ->
                                                                 apiService
-                                                                    .get()
                                                                     .getMovieDetails(tmdbId)
                                                             "tv" ->
                                                                 apiService
-                                                                    .get()
                                                                     .getTvDetails(tmdbId)
                                                             else -> null
                                                         }
@@ -606,7 +603,7 @@ constructor(
     override suspend fun getRequestById(requestId: Int): Result<JellyseerrRequest> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getRequestById(requestId)
+                val response = apiService.getRequestById(requestId)
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -621,7 +618,7 @@ constructor(
             val (currentServerId, currentUserId) =
                 activeContext ?: return@withContext Result.failure(Exception("No active session"))
             try {
-                val response = apiService.get().deleteRequest(requestId)
+                val response = apiService.deleteRequest(requestId)
                 if (response.isSuccessful) {
                     jellyseerrDao.deleteRequest(
                         requestId,
@@ -652,7 +649,7 @@ constructor(
                             rootFolder = rootFolder,
                         )
                     } else null
-                val response = apiService.get().approveRequest(requestId, body)
+                val response = apiService.approveRequest(requestId, body)
 
                 if (response.isSuccessful && response.body() != null) {
                     var req = response.body()!!
@@ -727,7 +724,7 @@ constructor(
                         rootFolder = rootFolder,
                     )
 
-                val response = apiService.get().updateRequest(requestId, requestBody)
+                val response = apiService.updateRequest(requestId, requestBody)
 
                 if (response.isSuccessful && response.body() != null) {
                     var updatedRequest = response.body()!!
@@ -781,7 +778,7 @@ constructor(
     override suspend fun declineRequest(requestId: Int): Result<JellyseerrRequest> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().declineRequest(requestId)
+                val response = apiService.declineRequest(requestId)
                 if (response.isSuccessful && response.body() != null) {
                     var req = response.body()!!
                     val (serverId, userId) =
@@ -825,7 +822,7 @@ constructor(
     override suspend fun searchMedia(query: String, page: Int): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().search(query, page)
+                val response = apiService.search(query, page)
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -842,14 +839,14 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getMovieDetails(movieId)
+                val response = apiService.getMovieDetails(movieId)
 
                 if (response.isSuccessful && response.body() != null) {
                     val details = response.body()!!
 
                     val ratingsResponse =
                         try {
-                            apiService.get().getMovieRatingsCombined(movieId)
+                            apiService.getMovieRatingsCombined(movieId)
                         } catch (e: Exception) {
                             Timber.w(e, "Failed to fetch ratings for movie $movieId")
                             null
@@ -879,14 +876,14 @@ constructor(
                     return@withContext Result.failure(Exception("No network connection"))
                 }
 
-                val response = apiService.get().getTvDetails(tvId)
+                val response = apiService.getTvDetails(tvId)
 
                 if (response.isSuccessful && response.body() != null) {
                     val details = response.body()!!
 
                     val ratingsResponse =
                         try {
-                            apiService.get().getTvRatings(tvId)
+                            apiService.getTvRatings(tvId)
                         } catch (e: Exception) {
                             Timber.w(e, "Failed to fetch ratings for TV show $tvId")
                             null
@@ -928,7 +925,7 @@ constructor(
     override suspend fun getTrending(page: Int, limit: Int?): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getTrending(page)
+                val response = apiService.getTrending(page)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     Result.success(
@@ -951,7 +948,6 @@ constructor(
             try {
                 val response =
                     apiService
-                        .get()
                         .getDiscoverMovies(page = page, sortBy = sortBy, studio = studio)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
@@ -974,7 +970,7 @@ constructor(
         return withContext(Dispatchers.IO) {
             try {
                 val response =
-                    apiService.get().getDiscoverTv(page = page, sortBy = sortBy, network = network)
+                    apiService.getDiscoverTv(page = page, sortBy = sortBy, network = network)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     Result.success(
@@ -990,7 +986,7 @@ constructor(
     override suspend fun getUpcomingMovies(page: Int, limit: Int?): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getUpcomingMovies(page)
+                val response = apiService.getUpcomingMovies(page)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     Result.success(
@@ -1006,7 +1002,7 @@ constructor(
     override suspend fun getUpcomingTv(page: Int, limit: Int?): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getUpcomingTv(page)
+                val response = apiService.getUpcomingTv(page)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     Result.success(
@@ -1030,7 +1026,7 @@ constructor(
     override suspend fun getMovieGenreSlider(): Result<List<GenreSliderItem>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getMovieGenreSlider()
+                val response = apiService.getMovieGenreSlider()
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -1043,7 +1039,7 @@ constructor(
     override suspend fun getTvGenreSlider(): Result<List<GenreSliderItem>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getTvGenreSlider()
+                val response = apiService.getTvGenreSlider()
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -1056,7 +1052,7 @@ constructor(
     override suspend fun getMoviesByGenre(genreId: Int, page: Int): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getMoviesByGenre(genreId, page)
+                val response = apiService.getMoviesByGenre(genreId, page)
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -1069,7 +1065,7 @@ constructor(
     override suspend fun getTvByGenre(genreId: Int, page: Int): Result<JellyseerrSearchResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.get().getTvByGenre(genreId, page)
+                val response = apiService.getTvByGenre(genreId, page)
                 if (response.isSuccessful && response.body() != null)
                     Result.success(response.body()!!)
                 else Result.failure(Exception("Failed"))
@@ -1087,8 +1083,8 @@ constructor(
                 }
                 val response =
                     when (mediaType) {
-                        MediaType.MOVIE -> apiService.get().getRadarrSettings()
-                        MediaType.TV -> apiService.get().getSonarrSettings()
+                        MediaType.MOVIE -> apiService.getRadarrSettings()
+                        MediaType.TV -> apiService.getSonarrSettings()
                     }
                 if (response.isSuccessful && response.body() != null) {
                     Result.success(response.body()!!)
@@ -1115,8 +1111,8 @@ constructor(
                 }
                 val response =
                     when (mediaType) {
-                        MediaType.MOVIE -> apiService.get().getRadarrDetails(serviceId)
-                        MediaType.TV -> apiService.get().getSonarrDetails(serviceId)
+                        MediaType.MOVIE -> apiService.getRadarrDetails(serviceId)
+                        MediaType.TV -> apiService.getSonarrDetails(serviceId)
                     }
                 if (response.isSuccessful && response.body() != null) {
                     Result.success(response.body()!!)

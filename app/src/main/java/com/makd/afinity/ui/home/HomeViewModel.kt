@@ -50,8 +50,6 @@ import com.makd.afinity.navigation.Destination
 import com.makd.afinity.ui.item.delegates.ItemUserDataDelegate
 import com.makd.afinity.ui.utils.IntentUtils
 import com.makd.afinity.util.NetworkConnectivityMonitor
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -83,11 +81,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class HomeViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val appDataRepository: AppDataRepository,
     private val userDataRepository: UserDataRepository,
     private val watchlistRepository: WatchlistRepository,

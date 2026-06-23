@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 
@@ -33,7 +33,7 @@ import com.makd.afinity.R
 fun RefreshMetadataDialog(
     itemId: String,
     onDismiss: () -> Unit,
-    viewModel: RefreshMetadataViewModel = hiltViewModel(),
+    viewModel: RefreshMetadataViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

@@ -61,7 +61,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.navigation.LocalPlayerOffset
@@ -72,7 +72,7 @@ import com.makd.afinity.util.isInsecurePublicUrl
 fun AddEditServerScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AddEditServerViewModel = hiltViewModel(),
+    viewModel: AddEditServerViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

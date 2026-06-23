@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -79,8 +79,8 @@ fun PlayerScreen(
     livePlaybackInfo: LiveTvPlaybackInfo? = null,
     onBackPressed: () -> Unit,
     navController: NavController? = null,
-    viewModel: PlayerViewModel = hiltViewModel(),
-    syncPlayViewModel: SyncPlayViewModel = hiltViewModel(),
+    viewModel: PlayerViewModel = koinViewModel(),
+    syncPlayViewModel: SyncPlayViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val syncPlayState by syncPlayViewModel.syncPlayState.collectAsStateWithLifecycle()
@@ -89,14 +89,8 @@ fun PlayerScreen(
     val playlistState by
         viewModel.playlistState.collectAsStateWithLifecycle(initialValue = PlaylistState())
 
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val preferencesRepository = remember {
-        dagger.hilt.android.EntryPointAccessors.fromApplication(
-                context.applicationContext,
-                com.makd.afinity.di.PreferencesEntryPoint::class.java,
-            )
-            .preferencesRepository()
-    }
+    val preferencesRepository =
+        org.koin.compose.koinInject<com.makd.afinity.data.repository.PreferencesRepository>()
     val subtitlePrefs by
         preferencesRepository
             .getSubtitlePreferencesFlow()

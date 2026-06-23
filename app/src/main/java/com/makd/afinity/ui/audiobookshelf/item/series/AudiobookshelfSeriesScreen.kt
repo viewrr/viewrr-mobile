@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.makd.afinity.R
@@ -57,7 +57,7 @@ import com.makd.afinity.ui.audiobookshelf.item.components.SeriesCoverGrid
 @Composable
 fun AudiobookshelfSeriesScreen(
     onNavigateToPlayer: (String, String?, Double?) -> Unit,
-    viewModel: AudiobookshelfSeriesViewModel = hiltViewModel(),
+    viewModel: AudiobookshelfSeriesViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val config by viewModel.currentConfig.collectAsStateWithLifecycle()

@@ -21,7 +21,6 @@ import com.makd.afinity.data.repository.userdata.UserDataRepository
 import com.makd.afinity.data.repository.watchlist.WatchlistRepository
 import com.makd.afinity.ui.item.delegates.ItemUserDataDelegate
 import com.makd.afinity.util.NetworkConnectivityMonitor
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +34,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
 class FavoritesViewModel
 @Inject
 constructor(

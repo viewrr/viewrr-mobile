@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -34,7 +34,7 @@ import com.makd.afinity.ui.person.components.PersonDetailContent
 fun PersonScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: PersonViewModel = hiltViewModel(),
+    viewModel: PersonViewModel = koinViewModel(),
     widthSizeClass: WindowWidthSizeClass,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

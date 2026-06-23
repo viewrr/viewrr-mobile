@@ -52,7 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import coil3.compose.AsyncImage
 import com.makd.afinity.R
 import com.makd.afinity.player.audiobookshelf.AudiobookshelfPlaybackState
@@ -69,7 +69,7 @@ import com.makd.afinity.ui.player.components.PlaybackStatsOverlay
 fun SharedTransitionScope.AudiobookshelfPlayerScreen(
     onNavigateBack: () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    viewModel: AudiobookshelfPlayerViewModel = hiltViewModel(),
+    viewModel: AudiobookshelfPlayerViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val playbackState by viewModel.playbackState.collectAsState()

@@ -1,7 +1,6 @@
 package com.makd.afinity.data.workers
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
@@ -12,9 +11,6 @@ import com.makd.afinity.data.models.extensions.toAfinityMovie
 import com.makd.afinity.data.models.media.AfinityTrickplayInfo
 import com.makd.afinity.data.repository.DatabaseRepository
 import com.makd.afinity.data.repository.download.JellyfinDownloadRepository
-import com.makd.afinity.di.DownloadClient
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -33,16 +29,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-@HiltWorker
 class TrickplayDownloadWorker
-@AssistedInject
 constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters,
+    appContext: Context,
+    workerParams: WorkerParameters,
     private val sessionManager: SessionManager,
     private val databaseRepository: DatabaseRepository,
     private val downloadRepository: JellyfinDownloadRepository,
-    @param:DownloadClient private val okHttpClient: OkHttpClient,
+    private val okHttpClient: OkHttpClient,
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {

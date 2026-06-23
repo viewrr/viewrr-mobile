@@ -35,7 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -59,7 +59,7 @@ fun GenreResultsScreen(
     onBackClick: () -> Unit,
     onItemClick: (AfinityItem) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: GenreResultsViewModel = hiltViewModel(),
+    viewModel: GenreResultsViewModel = koinViewModel(),
     widthSizeClass: WindowWidthSizeClass,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

@@ -68,8 +68,6 @@ import com.makd.afinity.data.repository.segments.SegmentsRepository
 import com.makd.afinity.player.audiobookshelf.AudiobookshelfPlayer
 import com.makd.afinity.player.mpv.MPVPlayer
 import com.makd.afinity.ui.player.utils.VolumeManager
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -88,11 +86,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 @UnstableApi
-@HiltViewModel
 class PlayerViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val application: Application,
     private val exoCache: SimpleCache,
     private val playbackRepository: PlaybackRepository,

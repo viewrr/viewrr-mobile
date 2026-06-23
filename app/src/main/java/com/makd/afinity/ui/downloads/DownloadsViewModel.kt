@@ -13,8 +13,6 @@ import com.makd.afinity.data.repository.download.DownloadRepository
 import com.makd.afinity.data.storage.StorageLocationProvider
 import com.makd.afinity.data.storage.StorageVolumeInfo
 import com.makd.afinity.data.storage.VolumeUnavailableException
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,11 +23,10 @@ import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
-@HiltViewModel
 class DownloadsViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val downloadRepository: DownloadRepository,
     private val absDownloadRepository: AbsDownloadRepository,
     private val preferencesRepository: PreferencesRepository,

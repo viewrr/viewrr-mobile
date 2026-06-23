@@ -2,7 +2,6 @@ package com.makd.afinity.player.audiobookshelf
 
 import android.content.Context
 import androidx.core.content.edit
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class AudiobookshelfSkipSilenceManager
 @Inject
-constructor(@param:ApplicationContext private val context: Context) {
+constructor(private val context: Context) {
     private val prefs =
         context.getSharedPreferences("audiobookshelf_skip_silence", Context.MODE_PRIVATE)
 

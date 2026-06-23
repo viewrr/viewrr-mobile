@@ -10,7 +10,6 @@ import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.server.AddressResolutionResult
 import com.makd.afinity.data.repository.server.ServerAddressResolver
 import com.makd.afinity.data.repository.server.ServerRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -52,7 +51,7 @@ constructor(
     private val serverAddressResolver: ServerAddressResolver,
     private val okHttpFactory: OkHttpFactory,
     private val jellyfin: Jellyfin,
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
 ) {
     private val _currentSession = MutableStateFlow<Session?>(null)
     val currentSession: StateFlow<Session?> = _currentSession.asStateFlow()

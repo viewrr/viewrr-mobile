@@ -85,7 +85,7 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.makd.afinity.R
@@ -113,7 +113,7 @@ fun SettingsScreen(
     onAppearanceOptionsClick: () -> Unit,
     onServerManagementClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val effectiveOfflineMode by viewModel.effectiveOfflineMode.collectAsStateWithLifecycle()
@@ -159,7 +159,7 @@ fun SettingsScreen(
     val audiobookshelfSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val sessionSwitcherSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val playerOffset = LocalPlayerOffset.current
-    val controlPanelViewModel: ControlPanelViewModel = hiltViewModel(key = "settings_control_panel")
+    val controlPanelViewModel: ControlPanelViewModel = koinViewModel(key = "settings_control_panel")
     val isAdmin by controlPanelViewModel.isAdmin.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.serverId) {

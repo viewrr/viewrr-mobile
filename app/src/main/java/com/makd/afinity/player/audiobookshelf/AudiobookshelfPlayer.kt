@@ -24,7 +24,6 @@ import com.makd.afinity.data.models.player.PlaybackStats
 import com.makd.afinity.data.repository.AudiobookshelfRepository
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.audiobookshelf.AbsProgressSyncScheduler
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,7 +44,7 @@ import kotlin.coroutines.resumeWithException
 class AudiobookshelfPlayer
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val playbackManager: AudiobookshelfPlaybackManager,
     private val securePreferencesRepository: SecurePreferencesRepository,
     private val audiobookshelfRepository: AudiobookshelfRepository,

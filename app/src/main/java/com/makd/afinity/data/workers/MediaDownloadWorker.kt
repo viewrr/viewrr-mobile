@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.ServiceInfo
 import android.net.Uri
 import androidx.core.app.NotificationCompat
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -32,10 +31,7 @@ import com.makd.afinity.data.repository.DatabaseRepository
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.repository.download.JellyfinDownloadRepository
 import com.makd.afinity.data.repository.segments.SegmentsRepository
-import com.makd.afinity.di.DownloadClient
 import com.makd.afinity.util.parseDashlessUuid
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -54,19 +50,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-@HiltWorker
 class MediaDownloadWorker
-@AssistedInject
 constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters,
+    appContext: Context,
+    workerParams: WorkerParameters,
     private val sessionManager: SessionManager,
     private val databaseRepository: DatabaseRepository,
     private val downloadRepository: JellyfinDownloadRepository,
     private val segmentsRepository: SegmentsRepository,
     private val preferencesRepository: PreferencesRepository,
     private val downloadSemaphoreManager: DownloadSemaphoreManager,
-    @param:DownloadClient private val okHttpClient: OkHttpClient,
+    private val okHttpClient: OkHttpClient,
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {

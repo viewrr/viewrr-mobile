@@ -13,7 +13,6 @@ import com.makd.afinity.BuildConfig
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.updater.models.GitHubRelease
 import com.makd.afinity.data.updater.models.UpdateState
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,7 +32,7 @@ import javax.inject.Singleton
 class UpdateManager
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val gitHubApiService: GitHubApiService,
     private val preferencesRepository: PreferencesRepository,
 ) {

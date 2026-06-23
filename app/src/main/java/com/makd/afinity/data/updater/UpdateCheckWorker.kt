@@ -2,20 +2,15 @@ package com.makd.afinity.data.updater
 
 import android.app.ActivityManager
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.makd.afinity.data.updater.notification.UpdateNotificationManager
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import timber.log.Timber
 
-@HiltWorker
 class UpdateCheckWorker
-@AssistedInject
 constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters,
+    appContext: Context,
+    workerParams: WorkerParameters,
     private val updateManager: UpdateManager,
     private val notificationManager: UpdateNotificationManager,
 ) : CoroutineWorker(appContext, workerParams) {

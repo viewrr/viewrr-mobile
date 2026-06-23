@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.ServiceInfo
 import androidx.core.app.NotificationCompat
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -23,10 +22,6 @@ import com.makd.afinity.data.network.AudiobookshelfApiService
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.audiobookshelf.AbsDownloadRepositoryImpl
-import com.makd.afinity.di.DownloadClient
-import dagger.Lazy
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
@@ -38,19 +33,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-@HiltWorker
 class AbsMediaDownloadWorker
-@AssistedInject
 constructor(
-    @Assisted private val appContext: Context,
-    @Assisted workerParams: WorkerParameters,
+    private val appContext: Context,
+    workerParams: WorkerParameters,
     private val absDownloadDao: AbsDownloadDao,
     private val audiobookshelfDao: AudiobookshelfDao,
-    private val apiService: Lazy<AudiobookshelfApiService>,
+    private val apiService: AudiobookshelfApiService,
     private val securePreferencesRepository: SecurePreferencesRepository,
     private val preferencesRepository: PreferencesRepository,
     private val downloadSemaphoreManager: DownloadSemaphoreManager,
-    @param:DownloadClient private val okHttpClient: OkHttpClient,
+    private val okHttpClient: OkHttpClient,
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {
@@ -134,7 +127,7 @@ constructor(
 
                 val itemResult = runCatching {
                     val response =
-                        apiService.get().getItem(libraryItemId, expanded = 1, include = null)
+                        apiService.getItem(libraryItemId, expanded = 1, include = null)
                     if (!response.isSuccessful || response.body() == null) {
                         throw Exception(
                             "Item API returned ${response.code()}: ${response.message()}"

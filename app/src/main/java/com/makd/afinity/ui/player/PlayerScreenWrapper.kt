@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import com.makd.afinity.R
 import java.util.UUID
 
@@ -37,7 +37,7 @@ fun PlayerScreenWrapper(
     navController: androidx.navigation.NavController? = null,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlayerWrapperViewModel = hiltViewModel(),
+    viewModel: PlayerWrapperViewModel = koinViewModel(),
 ) {
     val item by viewModel.item.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()

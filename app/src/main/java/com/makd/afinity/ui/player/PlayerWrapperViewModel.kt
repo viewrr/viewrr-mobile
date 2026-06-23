@@ -13,8 +13,6 @@ import com.makd.afinity.data.models.media.AfinityItem
 import com.makd.afinity.data.repository.DatabaseRepository
 import com.makd.afinity.data.repository.livetv.LiveTvRepository
 import com.makd.afinity.data.repository.media.MediaRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,11 +22,10 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-@HiltViewModel
 class PlayerWrapperViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val mediaRepository: MediaRepository,
     private val databaseRepository: DatabaseRepository,
     private val sessionManager: SessionManager,

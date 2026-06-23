@@ -38,7 +38,6 @@ import com.makd.afinity.data.repository.FieldSets
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.storage.StorageLocationProvider
 import com.makd.afinity.ui.library.FilterType
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -82,7 +81,7 @@ class JellyfinMediaRepository
 @Inject
 constructor(
     private val sessionManager: SessionManager,
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val boxSetCache: BoxSetCache,
     private val mdbListApiService: MdbListApiService,
     private val omdbApiService: OmdbApiService,

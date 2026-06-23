@@ -30,7 +30,6 @@ import com.makd.afinity.data.repository.media.MediaRepository
 import com.makd.afinity.data.repository.server.ServerRepository
 import com.makd.afinity.data.repository.watchlist.WatchlistRepository
 import com.makd.afinity.util.JellyfinImageUrlBuilder
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -66,7 +65,7 @@ import kotlin.time.Duration.Companion.hours
 class AppDataRepository
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val mediaRepository: MediaRepository,
     private val preferencesRepository: PreferencesRepository,
     private val sessionManager: SessionManager,

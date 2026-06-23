@@ -32,19 +32,18 @@ import com.makd.afinity.R
 import com.makd.afinity.data.models.player.PlayerEvent
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.ui.theme.AFinityTheme
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
 @UnstableApi
-@AndroidEntryPoint
 class PlayerActivity : ComponentActivity() {
 
-    private val viewModel: PlayerViewModel by viewModels()
+    private val viewModel: PlayerViewModel by viewModel()
 
-    @Inject lateinit var preferencesRepository: PreferencesRepository
-
+    private val preferencesRepository: PreferencesRepository by inject()
     private var wasPip: Boolean = false
     private var isResumed: Boolean = false
 

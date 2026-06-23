@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.audiofx.Equalizer
 import android.media.audiofx.LoudnessEnhancer
 import androidx.core.content.edit
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +38,7 @@ data class EqualizerState(
 @Singleton
 class AudiobookshelfEqualizerManager
 @Inject
-constructor(@param:ApplicationContext private val context: Context) {
+constructor(private val context: Context) {
     private val prefs =
         context.getSharedPreferences("audiobookshelf_equalizer", Context.MODE_PRIVATE)
 

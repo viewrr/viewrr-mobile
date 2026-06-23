@@ -18,8 +18,6 @@ import com.makd.afinity.data.models.jellyseerr.ServiceSettings
 import com.makd.afinity.data.models.jellyseerr.Studio
 import com.makd.afinity.data.repository.JellyseerrRepository
 import com.makd.afinity.util.GenreDuotoneColorGenerator
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,11 +33,10 @@ import kotlinx.coroutines.sync.withPermit
 import timber.log.Timber
 import javax.inject.Inject
 
-@HiltViewModel
 class RequestsViewModel
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val jellyseerrRepository: JellyseerrRepository,
 ) : ViewModel() {
 

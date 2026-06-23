@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.ui.settings.servers.components.ManageAddressesView
@@ -102,7 +102,7 @@ internal fun ServerDetailDialog(
     onDeleteAudiobookshelfAddress: (UUID) -> Unit,
     onAddJellyseerrAddress: (String) -> Unit,
     onAddAudiobookshelfAddress: (String) -> Unit,
-    controlPanelViewModel: ControlPanelViewModel = hiltViewModel(key = serverWithCount.server.id),
+    controlPanelViewModel: ControlPanelViewModel = koinViewModel(key = serverWithCount.server.id),
 ) {
     val status = serverWithCount.currentUserServiceStatus
     val tabs = buildList {

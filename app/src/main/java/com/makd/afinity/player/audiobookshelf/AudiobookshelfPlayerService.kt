@@ -40,7 +40,7 @@ import com.makd.afinity.MainActivity
 import com.makd.afinity.R
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.repository.SecurePreferencesRepository
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,20 +54,18 @@ import javax.inject.Inject
 
 @UnstableApi
 @OptIn(UnstableApi::class)
-@AndroidEntryPoint
 class AudiobookshelfPlayerService : MediaSessionService() {
 
     companion object {
         var currentAudioDecoder: String = "Unknown"
     }
 
-    @Inject lateinit var playbackManager: AudiobookshelfPlaybackManager
-    @Inject lateinit var progressSyncer: AudiobookshelfProgressSyncer
-    @Inject lateinit var securePreferencesRepository: SecurePreferencesRepository
-    @Inject lateinit var preferencesRepository: PreferencesRepository
-    @Inject lateinit var equalizerManager: AudiobookshelfEqualizerManager
-    @Inject lateinit var skipSilenceManager: AudiobookshelfSkipSilenceManager
-
+    private val playbackManager: AudiobookshelfPlaybackManager by inject()
+    private val progressSyncer: AudiobookshelfProgressSyncer by inject()
+    private val securePreferencesRepository: SecurePreferencesRepository by inject()
+    private val preferencesRepository: PreferencesRepository by inject()
+    private val equalizerManager: AudiobookshelfEqualizerManager by inject()
+    private val skipSilenceManager: AudiobookshelfSkipSilenceManager by inject()
     private var mediaSession: MediaSession? = null
     private var exoPlayer: ExoPlayer? = null
 

@@ -1,8 +1,6 @@
 package com.makd.afinity
 
 import android.app.Application
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -19,31 +17,29 @@ import com.makd.afinity.cast.CastManager
 import com.makd.afinity.data.repository.PreferencesRepository
 import com.makd.afinity.data.updater.UpdateScheduler
 import com.makd.afinity.data.updater.models.UpdateCheckFrequency
-import com.makd.afinity.di.ImageClient
+import com.makd.afinity.di.IMAGE_CLIENT
+import com.makd.afinity.di.appModules
 import com.makd.afinity.util.logging.CrashFileExporter
 import com.makd.afinity.util.logging.RingBufferTree
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okio.Path.Companion.toOkioPath
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.workmanager.koin.workManagerFactory
+import org.koin.core.context.startKoin
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltAndroidApp
-class AfinityApplication : Application(), Configuration.Provider, SingletonImageLoader.Factory {
+class AfinityApplication : Application(), SingletonImageLoader.Factory {
 
-    @Inject lateinit var workerFactory: HiltWorkerFactory
-
-    @Inject lateinit var updateScheduler: UpdateScheduler
-
-    @Inject lateinit var preferencesRepository: PreferencesRepository
-
-    @Inject lateinit var castManager: CastManager
-
-    @Inject @ImageClient lateinit var imageOkHttpClient: OkHttpClient
+    private val updateScheduler: UpdateScheduler by inject()
+    private val preferencesRepository: PreferencesRepository by inject()
+    private val castManager: CastManager by inject()
+    private val imageOkHttpClient: OkHttpClient by inject(IMAGE_CLIENT)
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     var ringBufferTree: RingBufferTree? = null
@@ -55,13 +51,16 @@ class AfinityApplication : Application(), Configuration.Provider, SingletonImage
     override fun onCreate() {
         super.onCreate()
 
+        startKoin {
+            androidLogger()
+            androidContext(this@AfinityApplication)
+            workManagerFactory()
+            modules(appModules)
+        }
+
         applicationScope.launch(Dispatchers.IO) {
-            Timber.d("ImageLoader prefs: reading from DataStore")
             imageCacheEnabled = preferencesRepository.getImageCacheEnabled()
             imageCacheSizeMb = preferencesRepository.getImageCacheSizeMb()
-            Timber.d(
-                "ImageLoader prefs: cacheEnabled=$imageCacheEnabled, cacheSizeMb=$imageCacheSizeMb"
-            )
         }
 
         val tree = RingBufferTree()
@@ -86,16 +85,10 @@ class AfinityApplication : Application(), Configuration.Provider, SingletonImage
         }
     }
 
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
-
     @OptIn(ExperimentalCoilApi::class)
     override fun newImageLoader(context: PlatformContext): ImageLoader {
         val isCacheEnabled = imageCacheEnabled
         val cacheSizeMb = imageCacheSizeMb
-        Timber.d(
-            "ImageLoader: creating singleton (cacheEnabled=$isCacheEnabled, cacheSizeMb=$cacheSizeMb)"
-        )
 
         return ImageLoader.Builder(context)
             .components {

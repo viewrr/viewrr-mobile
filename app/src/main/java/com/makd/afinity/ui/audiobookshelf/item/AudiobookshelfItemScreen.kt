@@ -61,7 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.data.models.audiobookshelf.AbsDownloadStatus
@@ -109,7 +109,7 @@ fun AudiobookshelfItemScreen(
     onNavigateToSeries: (seriesId: String, libraryId: String, seriesName: String) -> Unit =
         { _, _, _ ->
         },
-    viewModel: AudiobookshelfItemViewModel = hiltViewModel(),
+    viewModel: AudiobookshelfItemViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val item by viewModel.item.collectAsStateWithLifecycle()

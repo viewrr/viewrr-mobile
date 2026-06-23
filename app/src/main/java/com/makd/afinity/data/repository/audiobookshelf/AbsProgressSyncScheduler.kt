@@ -8,7 +8,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.makd.afinity.data.workers.AbsProgressSyncWorker
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -17,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class AbsProgressSyncScheduler
 @Inject
-constructor(@param:ApplicationContext private val context: Context) {
+constructor(private val context: Context) {
     fun scheduleSync(serverId: String, userId: UUID) {
         try {
             val constraints =

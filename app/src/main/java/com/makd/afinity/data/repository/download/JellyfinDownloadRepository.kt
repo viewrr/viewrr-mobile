@@ -26,7 +26,6 @@ import com.makd.afinity.data.workers.ImageDownloadWorker
 import com.makd.afinity.data.workers.MediaDownloadWorker
 import com.makd.afinity.data.workers.SubtitleDownloadWorker
 import com.makd.afinity.data.workers.TrickplayDownloadWorker
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +46,7 @@ import javax.inject.Singleton
 class JellyfinDownloadRepository
 @Inject
 constructor(
-    @param:ApplicationContext private val context: Context,
+    private val context: Context,
     private val sessionManager: SessionManager,
     private val mediaRepository: MediaRepository,
     private val databaseRepository: DatabaseRepository,

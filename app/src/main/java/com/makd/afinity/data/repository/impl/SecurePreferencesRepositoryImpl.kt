@@ -15,7 +15,6 @@ import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.makd.afinity.data.repository.AudiobookshelfAuthData
 import com.makd.afinity.data.repository.SecurePreferencesRepository
 import com.makd.afinity.data.repository.ServerUserToken
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +35,7 @@ private val Context.dataStore: DataStore<Preferences> by
 @Singleton
 class SecurePreferencesRepositoryImpl
 @Inject
-constructor(@param:ApplicationContext private val context: Context) : SecurePreferencesRepository {
+constructor(private val context: Context) : SecurePreferencesRepository {
 
     private companion object {
         private const val MASTER_KEY_URI = "android-keystore://_androidx_security_master_key_"

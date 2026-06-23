@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.makd.afinity.data.manager.OfflineModeManager
@@ -37,21 +37,17 @@ import com.makd.afinity.ui.components.AfinitySplashScreen
 import com.makd.afinity.ui.login.LoginScreen
 import com.makd.afinity.ui.theme.AFinityTheme
 import com.makd.afinity.ui.theme.ThemeMode
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var preferencesRepository: PreferencesRepository
-
-    @Inject lateinit var updateManager: UpdateManager
-
-    @Inject lateinit var offlineModeManager: OfflineModeManager
-
-    @Inject lateinit var updateScheduler: UpdateScheduler
-
-    private val mainViewModel: MainViewModel by viewModels()
+    private val preferencesRepository: PreferencesRepository by inject()
+    private val updateManager: UpdateManager by inject()
+    private val offlineModeManager: OfflineModeManager by inject()
+    private val updateScheduler: UpdateScheduler by inject()
+    private val mainViewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -123,7 +119,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainContent(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainViewModel = koinViewModel(),
     updateManager: UpdateManager,
     offlineModeManager: OfflineModeManager,
     widthSizeClass: WindowWidthSizeClass,

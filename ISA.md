@@ -44,7 +44,7 @@ data layer behind shared interfaces — then retarget the data layer to viewrr's
 - [x] ISC-2: `:shared` KMP module exists with android + ios targets; android build stays green.
 - [x] ISC-3: `:shared:compileKotlinIosSimulatorArm64` succeeds (iOS target compiles).
 - [ ] ISC-4: Zero `dagger.hilt` / `javax.inject` imports remain in shared code (Koin swap).
-- [ ] ISC-5: App wires DI via Koin; `:app:assembleDebug` green post-swap.
+- [x] ISC-5: App wires DI via Koin; `:app:assembleDebug` green post-swap (+ Koin verify() test passes).
 - [ ] ISC-6: Domain models + use cases live in `commonMain`.
 - [ ] ISC-7: ViewModels live in `commonMain` (lifecycle-viewmodel KMP).
 - [ ] ISC-8: UI composables + navigation live in `commonMain`.
@@ -86,3 +86,5 @@ ISC-1: ./gradlew :app:assembleDebug — BUILD SUCCESSFUL in 4m32s, APKs in app/b
 
 ISC-2: :shared module builds; :app:assembleDebug green with shared dep (BUILD SUCCESSFUL 4m4s).
 ISC-3: ./gradlew :shared:compileKotlinIosSimulatorArm64 — BUILD SUCCESSFUL.
+
+ISC-5: ./gradlew :app:assembleDebug + :app:testDebugUnitTest KoinModulesTest — BUILD SUCCESSFUL, 1 test 0 failures. Hilt removed (0 dagger imports), Koin 4.1 wired, graph verified.

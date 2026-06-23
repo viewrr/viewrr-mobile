@@ -9,7 +9,6 @@ import com.makd.afinity.data.models.audiobookshelf.MediaProgress
 import com.makd.afinity.data.models.audiobookshelf.PersonalizedView
 import com.makd.afinity.data.repository.AudiobookshelfConfig
 import com.makd.afinity.data.repository.AudiobookshelfRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -33,7 +32,6 @@ import javax.inject.Inject
 
 data class PersonalizedSection(val id: String, val label: String, val items: List<LibraryItem>)
 
-@HiltViewModel
 class AudiobookshelfLibrariesViewModel
 @Inject
 constructor(private val audiobookshelfRepository: AudiobookshelfRepository) : ViewModel() {

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.makd.afinity.data.models.admin.ItemImage
 import com.makd.afinity.data.repository.admin.AdminRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +24,6 @@ data class EditImagesUiState(
     val actionSuccess: Boolean = false,
 )
 
-@HiltViewModel
 class EditImagesViewModel
 @Inject
 constructor(

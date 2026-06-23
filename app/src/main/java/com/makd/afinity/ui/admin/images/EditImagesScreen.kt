@@ -61,7 +61,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.makd.afinity.R
@@ -72,7 +72,7 @@ import com.makd.afinity.data.models.admin.ItemImage
 fun EditImagesScreen(
     onNavigateUp: () -> Unit,
     onChangeMade: () -> Unit = {},
-    viewModel: EditImagesViewModel = hiltViewModel(),
+    viewModel: EditImagesViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

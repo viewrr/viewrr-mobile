@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -113,7 +113,7 @@ fun ItemDetailScreen(
     onPlayClick: (AfinityItem, PlaybackSelection?) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: ItemDetailViewModel = hiltViewModel(),
+    viewModel: ItemDetailViewModel = koinViewModel(),
     widthSizeClass: WindowWidthSizeClass,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

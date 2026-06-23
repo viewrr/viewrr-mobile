@@ -9,14 +9,13 @@ import androidx.core.app.NotificationCompat
 import com.makd.afinity.MainActivity
 import com.makd.afinity.R
 import com.makd.afinity.data.updater.models.GitHubRelease
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UpdateNotificationManager
 @Inject
-constructor(@param:ApplicationContext private val context: Context) {
+constructor(private val context: Context) {
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

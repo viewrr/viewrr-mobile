@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makd.afinity.R
 import com.makd.afinity.data.models.jellyseerr.MediaStatus
@@ -50,7 +50,7 @@ fun RequestsScreen(
     onProfileClick: () -> Unit,
     mainUiState: MainUiState,
     modifier: Modifier = Modifier,
-    viewModel: RequestsViewModel = hiltViewModel(),
+    viewModel: RequestsViewModel = koinViewModel(),
     onNavigateToFilteredMedia: (FilterParams) -> Unit = {},
     onItemClick: (jellyfinItemId: String, itemType: String?) -> Unit = { _, _ -> },
     widthSizeClass: WindowWidthSizeClass,
