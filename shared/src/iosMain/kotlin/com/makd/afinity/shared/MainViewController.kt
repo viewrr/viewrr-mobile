@@ -18,7 +18,7 @@ fun initKoin() {
     startKoin {
         // iOS simulator shares the host network; localhost reaches the dev Hub.
         modules(
-            viewrrModule(baseUrl = "http://localhost:8080") { null },
+            viewrrModule(baseUrl = "http://localhost:8080"),
             searchModule,
             detailModule,
             libraryModule,

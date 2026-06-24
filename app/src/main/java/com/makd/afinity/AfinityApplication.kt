@@ -62,7 +62,7 @@ class AfinityApplication : Application(), SingletonImageLoader.Factory {
             // #101: viewrr data layer. Dev base = emulator->host; token wiring lands with Keycloak.
             modules(
                 appModules +
-                    viewrrModule(baseUrl = "http://10.0.2.2:8080") { null } +
+                    viewrrModule(baseUrl = "http://10.0.2.2:8080") +
                     listOf(searchModule, detailModule, libraryModule)
             )
         }
