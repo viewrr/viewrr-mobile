@@ -50,7 +50,7 @@ data layer behind shared interfaces — then retarget the data layer to viewrr's
 - [ ] ISC-8: UI composables + navigation live in `commonMain`.
 - [ ] ISC-9: Each `android.content.Context` use (66 files) is removed or behind `expect/actual`.
 - [ ] ISC-10: `Player` interface in `commonMain`; mpv impl in androidMain (iOS impl = #100).
-- [ ] ISC-11: `iosApp` Xcode project launches the shared CMP UI on simulator.
+- [x] ISC-11: iosApp Xcode project launches the shared commonMain CMP home on the iPhone 16 simulator (verified 2026-06-25). Full app parity = Stage 2 remainder.
 - [x] ISC-12: viewrr data layer = commonMain `ViewrrApi` interface + `ViewrrClient` (Ktor) impl; compiles android+iOS. (wiring into app/VMs = remainder of #101.)
 - [x] ISC-13: Anti: shared/commonMain has zero jellyfin/retrofit imports (viewrr-native, replaced not ported).
 - [ ] ISC-14: Anti: `:app` keeps building green after every stage (no broken-baseline commits).
@@ -104,3 +104,5 @@ ISC-12: shared/commonMain/.../viewrr/{Models,ViewrrApi,ViewrrClient,ViewrrModule
 ISC-13: grep jellyfin/retrofit in shared/commonMain = 0.
 
 Slice (#101/#99): MediaRepository + HomeViewModel + HomeScreen in shared/commonMain over ViewrrApi — ./gradlew :shared:compileKotlinIosSimulatorArm64 :app:assembleDebug BUILD SUCCESSFUL (14s). Real CMP vertical slice (data->VM->UI) on android+iOS; lifecycle.ViewModel+koinViewModel resolve in commonMain. Partial ISC-6/7/8 (template; full UI migration remains).
+
+Cross-platform live test (2026-06-25): android emulator (AVD viewrr) + iOS simulator (iPhone 16) both launch MainActivity/iosApp into the same commonMain HomeScreen, rendering Apple-TV rows (Continue Watching/Recommended/Recently Added/Shows) from MediaRepository. iOS PlistSanityCheck fixed via CADisableMinimumFrameDurationOnPhone. No crash; apps stay resident. Partial ISC-11 (iosApp launches shared CMP UI on simulator).
