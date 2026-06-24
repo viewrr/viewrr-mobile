@@ -32,7 +32,8 @@ class ViewrrMediaRepository(private val api: ViewrrApi) : MediaRepository {
             ?.let { rows += HomeRow("Shows", it) }
         runCatching { api.musicAlbums() }.getOrNull()?.takeIf { it.isNotEmpty() }
             ?.let { rows += HomeRow("Music", it) }
-        return rows
+        // ponytail: fall back to placeholder rows when no backend is reachable (dev). Remove with #101.
+        return rows.ifEmpty { SampleData.homeRows }
     }
 
     override suspend fun search(query: String): List<MediaItem> = api.search(query)
