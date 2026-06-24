@@ -102,3 +102,5 @@ ISC-5: ./gradlew :app:assembleDebug + :app:testDebugUnitTest KoinModulesTest —
 
 ISC-12: shared/commonMain/.../viewrr/{Models,ViewrrApi,ViewrrClient,ViewrrModule}.kt — ./gradlew :shared:compileKotlinIosSimulatorArm64 :app:assembleDebug BUILD SUCCESSFUL (3m50s). Ktor 3.2 KMP, engine per-platform (okhttp/darwin).
 ISC-13: grep jellyfin/retrofit in shared/commonMain = 0.
+
+Slice (#101/#99): MediaRepository + HomeViewModel + HomeScreen in shared/commonMain over ViewrrApi — ./gradlew :shared:compileKotlinIosSimulatorArm64 :app:assembleDebug BUILD SUCCESSFUL (14s). Real CMP vertical slice (data->VM->UI) on android+iOS; lifecycle.ViewModel+koinViewModel resolve in commonMain. Partial ISC-6/7/8 (template; full UI migration remains).
