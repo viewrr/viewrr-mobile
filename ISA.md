@@ -78,8 +78,19 @@ Stage4-iosApp+api | ISC-11,12 | Stage3 | no (#100/#101)
 - 2026-06-24: Layout = shared + app + iosApp (user-chosen, official JetBrains CMP).
 - 2026-06-24: Data layer replaced not ported — #101 rewrites KMP-native (Ktor), skip Jellyfin/Retrofit port.
 - 2026-06-24: iosApp Xcode project deferred to Stage 4 (needs Xcode; iOS-compile proven via shared framework target meanwhile).
+- 2026-06-25: REORDER — Stage 2 (commonMain UI move) gated on #101. New order: #101 viewrr KMP
+  models/data-layer in commonMain → Stage 2 UI/VM move → Stage 3 expect/actual → Stage 4 iOS.
+  Forge/Anvil/codex unavailable this env (no API keys); Stage 1 done by hand.
 
 ## Changelog
+- 2026-06-25 conjecture: Stage 2 (move domain/VM/UI → commonMain) follows Stage 1 directly.
+  refuted-by: coupling scan — domain models are Jellyfin SDK DTOs (40 sdk imports) + Room
+  @Entity classes, depended on pervasively (repos → VMs → UI). jellyfin-sdk is not KMP and
+  Room android-entities can't live in commonMain; per Anti ISC-13 these are replaced, not ported.
+  learned: **Stage 2 is gated on #101.** The viewrr-native KMP model layer must exist in
+  commonMain before UI/VMs can move. Reordered plan: #101-models-first, then Stage 2 UI move,
+  then Stage 3 expect/actual for residual Context. #101 needs viewrr v0 API contract
+  (docs/api/client-api.md in viewrr/viewrr) — partially available; backend not finalized.
 
 ## Verification
 ISC-1: ./gradlew :app:assembleDebug — BUILD SUCCESSFUL in 4m32s, APKs in app/build/outputs/apk/debug.
