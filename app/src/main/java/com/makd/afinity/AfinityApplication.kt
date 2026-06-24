@@ -19,6 +19,7 @@ import com.makd.afinity.data.updater.UpdateScheduler
 import com.makd.afinity.data.updater.models.UpdateCheckFrequency
 import com.makd.afinity.di.IMAGE_CLIENT
 import com.makd.afinity.di.appModules
+import com.makd.afinity.shared.viewrr.viewrrModule
 import com.makd.afinity.util.logging.CrashFileExporter
 import com.makd.afinity.util.logging.RingBufferTree
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +56,8 @@ class AfinityApplication : Application(), SingletonImageLoader.Factory {
             androidLogger()
             androidContext(this@AfinityApplication)
             workManagerFactory()
-            modules(appModules)
+            // #101: viewrr data layer. Dev base = emulator->host; token wiring lands with Keycloak.
+            modules(appModules + viewrrModule(baseUrl = "http://10.0.2.2:8080") { null })
         }
 
         applicationScope.launch(Dispatchers.IO) {

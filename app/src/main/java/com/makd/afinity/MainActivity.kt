@@ -87,13 +87,9 @@ class MainActivity : ComponentActivity() {
                 windowInsetsController.isAppearanceLightStatusBars = isLightTheme
                 windowInsetsController.isAppearanceLightNavigationBars = isLightTheme
 
-                MainContent(
-                    modifier = Modifier.fillMaxSize(),
-                    viewModel = mainViewModel,
-                    updateManager = updateManager,
-                    offlineModeManager = offlineModeManager,
-                    widthSizeClass = windowSize.widthSizeClass,
-                )
+                // Migration (#99/#101): render the new commonMain CMP home over the viewrr
+                // client. Old Jellyfin MainContent stays in the file for reference/rollback.
+                com.makd.afinity.shared.ui.home.HomeScreen()
             }
         }
         lifecycleScope.launch {
