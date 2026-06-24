@@ -51,8 +51,8 @@ data layer behind shared interfaces — then retarget the data layer to viewrr's
 - [ ] ISC-9: Each `android.content.Context` use (66 files) is removed or behind `expect/actual`.
 - [ ] ISC-10: `Player` interface in `commonMain`; mpv impl in androidMain (iOS impl = #100).
 - [ ] ISC-11: `iosApp` Xcode project launches the shared CMP UI on simulator.
-- [ ] ISC-12: Data layer is a `commonMain` interface; viewrr Ktor client implements it (#101).
-- [ ] ISC-13: Anti: no Jellyfin/Retrofit code ported into `commonMain` (replaced, not migrated).
+- [x] ISC-12: viewrr data layer = commonMain `ViewrrApi` interface + `ViewrrClient` (Ktor) impl; compiles android+iOS. (wiring into app/VMs = remainder of #101.)
+- [x] ISC-13: Anti: shared/commonMain has zero jellyfin/retrofit imports (viewrr-native, replaced not ported).
 - [ ] ISC-14: Anti: `:app` keeps building green after every stage (no broken-baseline commits).
 
 ## Test Strategy
@@ -99,3 +99,6 @@ ISC-2: :shared module builds; :app:assembleDebug green with shared dep (BUILD SU
 ISC-3: ./gradlew :shared:compileKotlinIosSimulatorArm64 — BUILD SUCCESSFUL.
 
 ISC-5: ./gradlew :app:assembleDebug + :app:testDebugUnitTest KoinModulesTest — BUILD SUCCESSFUL, 1 test 0 failures. Hilt removed (0 dagger imports), Koin 4.1 wired, graph verified.
+
+ISC-12: shared/commonMain/.../viewrr/{Models,ViewrrApi,ViewrrClient,ViewrrModule}.kt — ./gradlew :shared:compileKotlinIosSimulatorArm64 :app:assembleDebug BUILD SUCCESSFUL (3m50s). Ktor 3.2 KMP, engine per-platform (okhttp/darwin).
+ISC-13: grep jellyfin/retrofit in shared/commonMain = 0.
