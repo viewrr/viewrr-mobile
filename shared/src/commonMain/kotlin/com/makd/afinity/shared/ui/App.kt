@@ -21,6 +21,7 @@ import com.makd.afinity.shared.ui.home.HomeScreen
 import com.makd.afinity.shared.ui.library.LibraryScreen
 import com.makd.afinity.shared.ui.player.PlayerScreen
 import com.makd.afinity.shared.ui.search.SearchScreen
+import com.makd.afinity.shared.ui.series.SeriesScreen
 import com.makd.afinity.shared.ui.settings.SettingsScreen
 import com.makd.afinity.shared.ui.theme.ViewrrTheme
 import com.makd.afinity.shared.viewrr.SessionStore
@@ -49,8 +50,9 @@ fun App() {
         var current by remember { mutableStateOf(Tab.HOME) }
         var detailId by remember { mutableStateOf<String?>(null) }
         var playerId by remember { mutableStateOf<String?>(null) }
+        var seriesTitle by remember { mutableStateOf<String?>(null) }
 
-        // Overlays take priority: player over detail over the tab shell.
+        // Overlays take priority: player over detail over series over the tab shell.
         playerId?.let { id ->
             PlayerScreen(mediaId = id, onBack = { playerId = null })
             return@ViewrrTheme
@@ -60,6 +62,15 @@ fun App() {
                 mediaId = id,
                 onBack = { detailId = null },
                 onPlay = { playerId = it },
+                onShow = { detailId = null; seriesTitle = it },
+            )
+            return@ViewrrTheme
+        }
+        seriesTitle?.let { title ->
+            SeriesScreen(
+                showTitle = title,
+                onBack = { seriesTitle = null },
+                onEpisodeClick = { seriesTitle = null; detailId = it },
             )
             return@ViewrrTheme
         }

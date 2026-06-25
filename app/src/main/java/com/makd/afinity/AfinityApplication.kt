@@ -26,6 +26,7 @@ import com.makd.afinity.shared.ui.player.playerModule
 import com.makd.afinity.shared.player.androidPlayerModule
 import com.makd.afinity.shared.ui.settings.settingsModule
 import com.makd.afinity.shared.ui.history.historyModule
+import com.makd.afinity.shared.ui.series.seriesModule
 import com.makd.afinity.shared.viewrr.viewrrModule
 import com.makd.afinity.util.logging.CrashFileExporter
 import com.makd.afinity.util.logging.RingBufferTree
@@ -70,7 +71,7 @@ class AfinityApplication : Application(), SingletonImageLoader.Factory {
                     listOf(
                         searchModule, detailModule, libraryModule,
                         playerModule, settingsModule, historyModule,
-                        androidPlayerModule,
+                        androidPlayerModule, seriesModule,
                     )
             )
         }
