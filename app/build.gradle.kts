@@ -3,11 +3,7 @@ import java.util.regex.Pattern
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.aboutlibraries.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 val appName = project.property("app.name") as String
@@ -15,18 +11,6 @@ val appVersionName = project.property("app.versionName") as String
 val appVersionCode = project.property("app.versionCode") as String
 
 base { archivesName.set("afinity-v${appVersionName}") }
-
-aboutLibraries {
-    library {
-        duplicationMode = com.mikepenz.aboutlibraries.plugin.DuplicateMode.MERGE
-        duplicationRule = com.mikepenz.aboutlibraries.plugin.DuplicateRule.GROUP
-
-        exclusionPatterns.addAll(
-            Pattern.compile("org\\.jetbrains\\.compose.*"),
-            Pattern.compile("org\\.jetbrains\\.androidx.*"),
-        )
-    }
-}
 
 configure<ApplicationExtension> {
     namespace = "com.makd.afinity"
@@ -111,76 +95,22 @@ kotlin {
 
 dependencies {
     implementation(project(":shared"))
+
+    // Android entry point only — the whole app UI lives in :shared (Compose Multiplatform).
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.workmanager)
-    implementation(libs.javax.inject)
+    implementation(libs.timber)
+    coreLibraryDesugaring(libs.android.desugar.jdk)
+
     testImplementation(libs.junit)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.android.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(libs.androidx.palette.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material3.window.size.class1)
-    implementation(libs.aboutlibraries.core)
-    implementation(libs.aboutlibraries.compose.m3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.ui)
-    implementation(libs.androidx.media3.common)
-    implementation(libs.androidx.media3.ui.compose)
-    implementation(libs.androidx.media3.ui.compose.material3)
-    implementation(libs.androidx.media3.exoplayer.hls)
-    implementation(libs.androidx.media3.session)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.tink.android)
-    implementation(libs.blurhash)
-    implementation(libs.okhttp)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.okhttp.logging.interceptor)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
-    implementation(libs.coil.network.cache.control)
-    implementation(libs.coil.svg)
-    implementation(libs.coil.gif)
-    implementation(libs.commonmark)
-    implementation(libs.commonmark.ext.autolink)
-    implementation(libs.jellyfin.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.libmpv)
-    implementation(libs.lottie.compose)
-    implementation(libs.media3.ffmpeg.decoder)
-    implementation(libs.timber)
-    implementation(libs.richtext.ui)
-    implementation(libs.richtext.ui.material3)
-    implementation(libs.richtext.commonmark)
-    implementation(libs.compose.pager.indicator)
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
-    implementation(libs.play.services.cast.framework)
-    implementation(libs.androidx.mediarouter)
-    coreLibraryDesugaring(libs.android.desugar.jdk)
 }
