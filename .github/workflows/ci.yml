@@ -13,9 +13,9 @@ concurrency:
 jobs:
   unit-tests:
     name: Unit tests (commonTest)
-    # macOS runner: the shared commonTest suite runs on the Kotlin/Native iOS target,
-    # which requires Xcode. Android SDK is provisioned for project configuration.
-    runs-on: macos-latest
+    # commonTest runs as JVM android host tests — no Xcode/iOS link needed, so a cheap
+    # Linux runner works (the iOS test target needs Xcode 26+ for the CMP UIKit link).
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -31,8 +31,8 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run commonTest unit suite
-        run: ./gradlew :shared:iosSimulatorArm64Test --stacktrace
+      - name: Run commonTest unit suite (JVM host)
+        run: ./gradlew :shared:testAndroidHostTest --stacktrace
 
       - name: Upload test report
         if: always()

@@ -16,6 +16,8 @@ kotlin {
         compileSdk = 36
         minSdk = 35
         compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
+        // Run commonTest as JVM host unit tests (CI uses this — no iOS/CMP link needed).
+        withHostTest {}
     }
 
     listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
