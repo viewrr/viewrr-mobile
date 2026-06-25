@@ -3,8 +3,11 @@ package com.makd.afinity.shared
 import androidx.compose.ui.window.ComposeUIViewController
 import com.makd.afinity.shared.ui.App
 import com.makd.afinity.shared.ui.detail.detailModule
+import com.makd.afinity.shared.ui.history.historyModule
 import com.makd.afinity.shared.ui.library.libraryModule
+import com.makd.afinity.shared.ui.player.playerModule
 import com.makd.afinity.shared.ui.search.searchModule
+import com.makd.afinity.shared.ui.settings.settingsModule
 import com.makd.afinity.shared.viewrr.viewrrModule
 import org.koin.core.context.startKoin
 import platform.UIKit.UIViewController
@@ -22,6 +25,9 @@ fun initKoin() {
             searchModule,
             detailModule,
             libraryModule,
+            playerModule,
+            settingsModule,
+            historyModule,
         )
     }
 }

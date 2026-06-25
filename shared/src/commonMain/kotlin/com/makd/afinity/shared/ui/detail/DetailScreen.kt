@@ -32,6 +32,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DetailScreen(
     mediaId: String,
     onBack: () -> Unit = {},
+    onPlay: (String) -> Unit = {},
     viewModel: DetailViewModel = koinViewModel(),
 ) {
     LaunchedEffect(mediaId) { viewModel.load(mediaId) }
@@ -44,13 +45,13 @@ fun DetailScreen(
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
                     Text(s.message, color = MaterialTheme.colorScheme.error)
                 }
-            is DetailUiState.Content -> DetailContent(s.item)
+            is DetailUiState.Content -> DetailContent(s.item, onPlay)
         }
     }
 }
 
 @Composable
-private fun DetailContent(item: MediaItem) {
+private fun DetailContent(item: MediaItem, onPlay: (String) -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Box(
             Modifier.fillMaxWidth()
@@ -85,7 +86,7 @@ private fun DetailContent(item: MediaItem) {
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 )
             }
-            Button(onClick = {}) { Text("Play") }
+            Button(onClick = { onPlay(item.id) }) { Text("Play") }
             item.overview?.let { overview ->
                 Text(text = overview, style = MaterialTheme.typography.bodyMedium)
             }
