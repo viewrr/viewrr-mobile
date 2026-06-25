@@ -23,6 +23,7 @@ import com.makd.afinity.shared.ui.search.searchModule
 import com.makd.afinity.shared.ui.detail.detailModule
 import com.makd.afinity.shared.ui.library.libraryModule
 import com.makd.afinity.shared.ui.player.playerModule
+import com.makd.afinity.shared.player.androidPlayerModule
 import com.makd.afinity.shared.ui.settings.settingsModule
 import com.makd.afinity.shared.ui.history.historyModule
 import com.makd.afinity.shared.viewrr.viewrrModule
@@ -69,6 +70,7 @@ class AfinityApplication : Application(), SingletonImageLoader.Factory {
                     listOf(
                         searchModule, detailModule, libraryModule,
                         playerModule, settingsModule, historyModule,
+                        androidPlayerModule,
                     )
             )
         }

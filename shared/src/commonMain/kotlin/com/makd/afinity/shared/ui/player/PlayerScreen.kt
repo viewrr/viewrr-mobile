@@ -50,8 +50,11 @@ fun PlayerScreen(
                 }
 
             is PlayerUiState.Ready -> {
-                // Placeholder "video surface" — the native surface arrives with #100.
-                Box(Modifier.fillMaxSize().background(Color.Black))
+                // Native video surface — media3 PlayerView (Android) / AVPlayerLayer (iOS).
+                com.makd.afinity.shared.player.VideoSurface(
+                    player = viewModel.boundPlayer,
+                    modifier = Modifier.fillMaxSize(),
+                )
 
                 // Controls overlay.
                 Column(

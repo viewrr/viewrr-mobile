@@ -29,6 +29,9 @@ class PlayerViewModel(
     private val _state = MutableStateFlow<PlayerUiState>(PlayerUiState.Loading)
     val state: StateFlow<PlayerUiState> = _state.asStateFlow()
 
+    /** The platform player instance — passed to VideoSurface to render its output. */
+    val boundPlayer: Player get() = player
+
     /** Live playback status from the underlying [Player]. */
     val playerState: StateFlow<PlaybackStatus> = player.state
 
