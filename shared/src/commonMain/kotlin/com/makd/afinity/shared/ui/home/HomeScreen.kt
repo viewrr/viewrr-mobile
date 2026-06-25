@@ -31,7 +31,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 /** First commonMain screen — Apple-TV style home, end-to-end over the viewrr client. */
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
+fun HomeScreen(onItemClick: (String) -> Unit = {}, viewModel: HomeViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         when (val s = state) {
@@ -46,14 +46,14 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
                     contentPadding = PaddingValues(vertical = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
-                    items(s.rows) { row -> HomeRowView(row) }
+                    items(s.rows) { row -> HomeRowView(row, onItemClick) }
                 }
         }
     }
 }
 
 @Composable
-private fun HomeRowView(row: HomeRow) {
+private fun HomeRowView(row: HomeRow, onItemClick: (String) -> Unit) {
     Column(Modifier.fillMaxWidth()) {
         Text(
             text = row.title,
@@ -64,7 +64,9 @@ private fun HomeRowView(row: HomeRow) {
             contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            items(row.items) { item -> PosterCard(item) }
+            items(row.items) { item ->
+                com.makd.afinity.shared.ui.components.MediaCard(item, onItemClick)
+            }
         }
     }
 }

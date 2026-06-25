@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
@@ -72,6 +73,10 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
                 } else {
                     Text("Sign in")
                 }
+            }
+            // ponytail: dev-only — browse UI offline before a Hub/Keycloak exists.
+            TextButton(onClick = { viewModel.continueOffline() }) {
+                Text("Continue offline (dev)")
             }
         }
     }

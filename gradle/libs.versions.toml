@@ -97,6 +97,8 @@ hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-comp
 jellyfin-core = { module = "org.jellyfin.sdk:jellyfin-core", version.ref = "jellyfinCore" }
 javax-inject = { module = "javax.inject:javax.inject", version = "1" }
 junit = { module = "junit:junit", version = "4.13.2" }
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil3-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }

@@ -30,7 +30,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 /** commonMain library browse screen — Shows / Music tabs over the viewrr client. */
 @Composable
-fun LibraryScreen(viewModel: LibraryViewModel = koinViewModel()) {
+fun LibraryScreen(onItemClick: (String) -> Unit = {}, viewModel: LibraryViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val selectedTab by viewModel.selectedTab.collectAsState()
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -61,7 +61,11 @@ fun LibraryScreen(viewModel: LibraryViewModel = koinViewModel()) {
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        items(s.items) { item -> PosterCard(item) }
+                        items(s.items) { item ->
+                            com.makd.afinity.shared.ui.components.MediaCard(
+                                item, onItemClick, androidx.compose.ui.Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
             }
         }

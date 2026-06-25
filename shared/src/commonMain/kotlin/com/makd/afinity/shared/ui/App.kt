@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.makd.afinity.shared.ui.auth.LoginScreen
+import com.makd.afinity.shared.ui.detail.DetailScreen
 import com.makd.afinity.shared.ui.home.HomeScreen
 import com.makd.afinity.shared.ui.library.LibraryScreen
 import com.makd.afinity.shared.ui.search.SearchScreen
@@ -40,6 +41,14 @@ fun App() {
             return@MaterialTheme
         }
         var current by remember { mutableStateOf(Tab.HOME) }
+        var detailId by remember { mutableStateOf<String?>(null) }
+
+        detailId?.let { id ->
+            DetailScreen(mediaId = id, onBack = { detailId = null })
+            return@MaterialTheme
+        }
+
+        val openDetail: (String) -> Unit = { detailId = it }
         Scaffold(
             bottomBar = {
                 NavigationBar {
@@ -56,9 +65,9 @@ fun App() {
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (current) {
-                    Tab.HOME -> HomeScreen()
-                    Tab.SEARCH -> SearchScreen()
-                    Tab.LIBRARY -> LibraryScreen()
+                    Tab.HOME -> HomeScreen(onItemClick = openDetail)
+                    Tab.SEARCH -> SearchScreen(onItemClick = openDetail)
+                    Tab.LIBRARY -> LibraryScreen(onItemClick = openDetail)
                 }
             }
         }

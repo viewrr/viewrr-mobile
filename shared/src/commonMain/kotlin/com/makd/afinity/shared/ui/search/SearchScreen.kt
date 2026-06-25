@@ -29,7 +29,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 /** commonMain search screen — query field over a poster grid of viewrr results. */
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
+fun SearchScreen(onItemClick: (String) -> Unit = {}, viewModel: SearchViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val query by viewModel.query.collectAsState()
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -60,7 +60,11 @@ fun SearchScreen(viewModel: SearchViewModel = koinViewModel()) {
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-                            items(s.results) { item -> PosterCard(item) }
+                            items(s.results) { item ->
+                                com.makd.afinity.shared.ui.components.MediaCard(
+                                    item, onItemClick, androidx.compose.ui.Modifier.fillMaxWidth(),
+                                )
+                            }
                         }
                 }
             }

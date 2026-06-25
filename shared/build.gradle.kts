@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json.kmp)
             implementation(libs.ktor.client.core)

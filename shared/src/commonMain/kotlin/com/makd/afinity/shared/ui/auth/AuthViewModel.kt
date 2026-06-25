@@ -24,6 +24,9 @@ class AuthViewModel(
     private val _state = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
+    /** ponytail: dev bypass for offline UI work (no Hub). Drop when Keycloak lands. */
+    fun continueOffline() = session.setToken("offline-dev")
+
     fun login(username: String, password: String) {
         if (username.isBlank() || password.isBlank()) {
             _state.value = LoginUiState.Error("Enter username and password")
