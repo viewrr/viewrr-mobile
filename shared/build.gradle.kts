@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.coil3.network.ktor)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json.kmp)
+            implementation(libs.multiplatform.settings)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
@@ -57,6 +58,7 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.multiplatform.settings.test)
         }
     }
 }

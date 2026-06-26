@@ -32,7 +32,7 @@ class AuthViewModelTest {
     @Test
     fun login_success_setsTokenAndRecordsLogin() = runTest {
         val fake = FakeViewrrApi(loginTokens = AuthTokens(token = "real-token"))
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         val vm = AuthViewModel(fake, session)
 
         vm.login("alice", "secret")
@@ -46,7 +46,7 @@ class AuthViewModelTest {
     @Test
     fun login_blankInput_emitsErrorWithoutCallingApi() = runTest {
         val fake = FakeViewrrApi()
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         val vm = AuthViewModel(fake, session)
 
         vm.login("", "secret")
@@ -60,7 +60,7 @@ class AuthViewModelTest {
     @Test
     fun login_failure_emitsError() = runTest {
         val fake = FakeViewrrApi(error = RuntimeException("boom"))
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         val vm = AuthViewModel(fake, session)
 
         vm.login("alice", "secret")
@@ -74,7 +74,7 @@ class AuthViewModelTest {
 
     @Test
     fun continueOffline_setsLoggedIn() = runTest {
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         val vm = AuthViewModel(FakeViewrrApi(), session)
 
         vm.continueOffline()

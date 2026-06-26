@@ -1,6 +1,7 @@
 package com.makd.afinity.shared.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,12 +14,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.makd.afinity.shared.ui.theme.tvFocusScale
 import com.makd.afinity.shared.viewrr.MediaItem
 
 /**
@@ -31,7 +38,14 @@ fun MediaCard(
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier.width(120.dp),
 ) {
-    Column(modifier.clickable { onClick(item.id) }) {
+    var focused by remember { mutableStateOf(false) }
+    Column(
+        modifier
+            .clickable { onClick(item.id) }
+            .onFocusChanged { focused = it.isFocused }
+            .focusable()
+            .tvFocusScale(focused)
+    ) {
         Box(
             Modifier.fillMaxWidth()
                 .aspectRatio(2f / 3f)
