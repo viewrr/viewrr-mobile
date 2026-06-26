@@ -10,7 +10,7 @@ class SessionStoreTest {
 
     @Test
     fun newStore_isLoggedOutWithNoToken() {
-        val store = SessionStore()
+        val store = SessionStore(com.russhwolf.settings.MapSettings())
 
         assertFalse(store.isLoggedIn.value)
         assertNull(store.token)
@@ -18,7 +18,7 @@ class SessionStoreTest {
 
     @Test
     fun setToken_logsInAndStoresToken() {
-        val store = SessionStore()
+        val store = SessionStore(com.russhwolf.settings.MapSettings())
 
         store.setToken("t")
 
@@ -28,7 +28,7 @@ class SessionStoreTest {
 
     @Test
     fun setTokenNull_logsOut() {
-        val store = SessionStore()
+        val store = SessionStore(com.russhwolf.settings.MapSettings())
         store.setToken("t")
 
         store.setToken(null)
@@ -39,7 +39,7 @@ class SessionStoreTest {
 
     @Test
     fun clear_logsOut() {
-        val store = SessionStore()
+        val store = SessionStore(com.russhwolf.settings.MapSettings())
         store.setToken("t")
 
         store.clear()
@@ -50,7 +50,7 @@ class SessionStoreTest {
 
     @Test
     fun setBlankToken_isNotLoggedIn() {
-        val store = SessionStore()
+        val store = SessionStore(com.russhwolf.settings.MapSettings())
 
         store.setToken("")
 

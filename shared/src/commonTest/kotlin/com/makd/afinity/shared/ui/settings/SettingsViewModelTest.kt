@@ -26,7 +26,7 @@ class SettingsViewModelTest {
 
     @Test
     fun reflectsLoggedInState() = runTest {
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         session.setToken("tok")
         val vm = SettingsViewModel(session)
 
@@ -35,7 +35,7 @@ class SettingsViewModelTest {
 
     @Test
     fun logout_clearsSession() = runTest {
-        val session = SessionStore()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
         session.setToken("tok")
         val vm = SettingsViewModel(session)
         assertTrue(vm.loggedIn.value)
