@@ -22,7 +22,7 @@ class AfinityApplication : Application() {
             androidLogger()
             androidContext(this@AfinityApplication)
             modules(
-                viewrrModule(baseUrl = "http://10.0.2.2:8080"),
+                viewrrModule(baseUrl = "https://api.viewrr.stream"),
                 searchModule, detailModule, libraryModule,
                 playerModule, settingsModule, historyModule, seriesModule,
                 androidPlayerModule,

@@ -77,7 +77,7 @@ data class StremioKey(val key: String)
 
 @Serializable
 data class AuthTokens(
-    val token: String,
+    @SerialName("accessToken") val token: String,
     val refreshToken: String? = null,
 )
 
