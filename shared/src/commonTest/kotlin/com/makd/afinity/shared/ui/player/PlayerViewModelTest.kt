@@ -47,7 +47,7 @@ class PlayerViewModelTest {
     }
 
     @Test
-    fun start_failure_emitsError() = runTest {
+    fun start_failure_fallsBackToSampleStream() = runTest {
         val fake = FakeViewrrApi(error = RuntimeException("boom"))
         val player = StubPlayer()
         val vm = PlayerViewModel(fake, player)
@@ -55,9 +55,9 @@ class PlayerViewModelTest {
         vm.start("abc")
         advanceUntilIdle()
 
+        // Dev fallback (#101): on resolve failure, play the sample stream instead of erroring.
         val state = vm.state.value
-        assertIs<PlayerUiState.Error>(state)
-        assertEquals("boom", state.message)
-        assertTrue(!player.state.value.isPlaying)
+        assertIs<PlayerUiState.Ready>(state)
+        assertTrue(player.state.value.isPlaying)
     }
 }

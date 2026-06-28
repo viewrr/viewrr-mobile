@@ -28,7 +28,12 @@ class DetailViewModel(private val api: ViewrrApi) : ViewModel() {
                 runCatching { api.mediaDetail(id) }
                     .fold(
                         onSuccess = { DetailUiState.Content(it) },
-                        onFailure = { DetailUiState.Error(it.message ?: "Failed to load") },
+                        // ponytail: dev fallback so detail renders before /media/{id} exists. Remove with #101.
+                        onFailure = {
+                            DetailUiState.Content(
+                                com.makd.afinity.shared.viewrr.SampleData.sampleDetail(id),
+                            )
+                        },
                     )
         }
     }
