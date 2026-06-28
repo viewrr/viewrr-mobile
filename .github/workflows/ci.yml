@@ -81,3 +81,41 @@ jobs:
           name: test-results-ios
           path: shared/build/test-results/**/*.xml
           if-no-files-found: ignore
+
+  ios-smoke:
+    name: iOS render smoke (manual)
+    # Manual only — builds the real iosApp, launches it on a booted simulator, asserts it
+    # didn't crash on the shared CMP UI, and uploads a screenshot for visual render proof.
+    # Not on PRs (heavy xcodebuild + boot). Full tap-automation (drive to Play) = XCUITest TODO.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run iOS render smoke test
+        run: ./iosApp/sim-smoke-test.sh "iPhone 16"
+
+      - name: Upload render screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-render-screenshot
+          path: /tmp/viewrr-ios-smoke.png
+          if-no-files-found: ignore

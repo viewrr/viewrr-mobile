@@ -12,6 +12,11 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/iosApp/build/out"
 SHOT="${SHOT:-/tmp/viewrr-ios-smoke.png}"
 
+echo "==> Pre-building shared framework (so xcodebuild's Swift compile can import 'shared')"
+# On a clean checkout (CI) the framework isn't on disk yet; the Xcode build phase that
+# embeds it runs after the Swift compile, so build it first or iOSApp.swift can't find it.
+( cd "$ROOT" && ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64 )
+
 echo "==> Building iosApp (arm64 simulator)"
 xcodebuild -project "$ROOT/iosApp/iosApp.xcodeproj" -target iosApp -sdk iphonesimulator \
   -configuration Debug ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
