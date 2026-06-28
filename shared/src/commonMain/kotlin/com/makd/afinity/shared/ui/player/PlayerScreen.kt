@@ -4,11 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +53,14 @@ fun PlayerScreen(
                 }
 
             is PlayerUiState.Ready -> {
+                // Poll position/duration each second while the player exists.
+                LaunchedEffect(Unit) {
+                    while (true) {
+                        kotlinx.coroutines.delay(1000)
+                        viewModel.refresh()
+                    }
+                }
+
                 // Native video surface — media3 PlayerView (Android) / AVPlayerLayer (iOS).
                 com.makd.afinity.shared.player.VideoSurface(
                     player = viewModel.boundPlayer,
@@ -83,11 +94,32 @@ fun PlayerScreen(
                         )
                     }
 
-                    Button(onClick = { viewModel.togglePlayPause() }) {
-                        Text(if (playerStatus.isPlaying) "Pause" else "Play")
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        val duration = playerStatus.durationSecs.coerceAtLeast(0)
+                        Slider(
+                            value = playerStatus.positionSecs.toFloat().coerceIn(0f, duration.toFloat()),
+                            onValueChange = { viewModel.seekTo(it.toLong()) },
+                            valueRange = 0f..(if (duration > 0) duration.toFloat() else 1f),
+                            enabled = duration > 0,
+                        )
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Text(fmtTime(playerStatus.positionSecs), color = Color.White, style = MaterialTheme.typography.labelSmall)
+                            Box(Modifier.weight(1f))
+                            Text(fmtTime(duration), color = Color.White, style = MaterialTheme.typography.labelSmall)
+                        }
+                        Button(onClick = { viewModel.togglePlayPause() }) {
+                            Text(if (playerStatus.isPlaying) "Pause" else "Play")
+                        }
                     }
                 }
             }
         }
     }
+}
+
+private fun fmtTime(secs: Long): String {
+    val s = secs.coerceAtLeast(0)
+    val m = s / 60
+    val r = s % 60
+    return "$m:${if (r < 10) "0$r" else "$r"}"
 }

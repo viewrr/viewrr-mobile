@@ -9,7 +9,11 @@ import platform.AVFoundation.AVPlayerItem
 import platform.AVFoundation.pause
 import platform.AVFoundation.play
 import platform.AVFoundation.replaceCurrentItemWithPlayerItem
+import platform.AVFoundation.currentItem
+import platform.AVFoundation.currentTime
+import platform.AVFoundation.duration
 import platform.AVFoundation.seekToTime
+import platform.CoreMedia.CMTimeGetSeconds
 import platform.CoreMedia.CMTimeMakeWithSeconds
 import platform.Foundation.NSURL
 
@@ -49,5 +53,12 @@ class AvPlayer : Player {
         avPlayer.pause()
         avPlayer.replaceCurrentItemWithPlayerItem(null)
         _state.value = PlaybackStatus()
+    }
+
+    override fun refreshState() {
+        val pos = CMTimeGetSeconds(avPlayer.currentTime()).toLong().coerceAtLeast(0)
+        val durSecs = avPlayer.currentItem?.duration?.let { CMTimeGetSeconds(it) }
+        val dur = if (durSecs != null && !durSecs.isNaN() && durSecs > 0) durSecs.toLong() else 0
+        _state.value = _state.value.copy(positionSecs = pos, durationSecs = dur)
     }
 }
