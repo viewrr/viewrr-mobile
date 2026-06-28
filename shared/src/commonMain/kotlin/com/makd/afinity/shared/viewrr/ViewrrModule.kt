@@ -2,6 +2,7 @@ package com.makd.afinity.shared.viewrr
 
 import com.makd.afinity.shared.ui.auth.AuthViewModel
 import com.makd.afinity.shared.ui.home.HomeViewModel
+import com.russhwolf.settings.Settings
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -12,7 +13,7 @@ import org.koin.dsl.module
  * The HTTP client reads the bearer from [SessionStore] on every request.
  */
 fun viewrrModule(baseUrl: String): Module = module {
-    single { SessionStore() }
+    single { SessionStore(Settings()) }
     single<ViewrrApi> {
         val session = get<SessionStore>()
         ViewrrClient(baseUrl) { session.token }

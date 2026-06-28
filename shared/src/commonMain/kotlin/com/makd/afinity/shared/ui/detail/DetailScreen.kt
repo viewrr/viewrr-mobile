@@ -33,6 +33,7 @@ fun DetailScreen(
     mediaId: String,
     onBack: () -> Unit = {},
     onPlay: (String) -> Unit = {},
+    onShow: (String) -> Unit = {},
     viewModel: DetailViewModel = koinViewModel(),
 ) {
     LaunchedEffect(mediaId) { viewModel.load(mediaId) }
@@ -45,13 +46,13 @@ fun DetailScreen(
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
                     Text(s.message, color = MaterialTheme.colorScheme.error)
                 }
-            is DetailUiState.Content -> DetailContent(s.item, onPlay)
+            is DetailUiState.Content -> DetailContent(s.item, onPlay, onShow)
         }
     }
 }
 
 @Composable
-private fun DetailContent(item: MediaItem, onPlay: (String) -> Unit) {
+private fun DetailContent(item: MediaItem, onPlay: (String) -> Unit, onShow: (String) -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Box(
             Modifier.fillMaxWidth()
@@ -87,6 +88,11 @@ private fun DetailContent(item: MediaItem, onPlay: (String) -> Unit) {
                 )
             }
             Button(onClick = { onPlay(item.id) }) { Text("Play") }
+            item.showTitle?.let { show ->
+                androidx.compose.material3.OutlinedButton(onClick = { onShow(show) }) {
+                    Text("View show")
+                }
+            }
             item.overview?.let { overview ->
                 Text(text = overview, style = MaterialTheme.typography.bodyMedium)
             }

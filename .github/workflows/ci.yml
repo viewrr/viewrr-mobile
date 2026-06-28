@@ -5,6 +5,7 @@ on:
     branches: [develop, master]
   push:
     branches: [develop]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -13,9 +14,9 @@ concurrency:
 jobs:
   unit-tests:
     name: Unit tests (commonTest)
-    # macOS runner: the shared commonTest suite runs on the Kotlin/Native iOS target,
-    # which requires Xcode. Android SDK is provisioned for project configuration.
-    runs-on: macos-latest
+    # commonTest runs as JVM android host tests — no Xcode/iOS link needed, so a cheap
+    # Linux runner works (the iOS test target needs Xcode 26+ for the CMP UIKit link).
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -31,13 +32,52 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run commonTest unit suite
+      - name: Run commonTest unit suite (JVM host)
+        run: ./gradlew :shared:testAndroidHostTest --stacktrace
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-jvm
+          path: shared/build/test-results/**/*.xml
+          if-no-files-found: ignore
+
+  ios-tests:
+    name: iOS unit tests (Kotlin/Native)
+    # The commonTest suite on the iOS simulator target — needs Xcode 26+ to link
+    # Compose Multiplatform's UIKit layer (UIViewLayoutRegion/UIUtilities).
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Print Xcode version
+        run: xcodebuild -version
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run commonTest on iOS simulator target
         run: ./gradlew :shared:iosSimulatorArm64Test --stacktrace
 
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-ios
           path: shared/build/test-results/**/*.xml
           if-no-files-found: ignore
