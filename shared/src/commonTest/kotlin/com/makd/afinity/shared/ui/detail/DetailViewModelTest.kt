@@ -42,15 +42,16 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun load_failure_emitsError() = runTest {
+    fun load_failure_fallsBackToSampleDetail() = runTest {
         val fake = FakeViewrrApi(error = RuntimeException("boom"))
         val vm = DetailViewModel(fake)
 
         vm.load("abc")
         advanceUntilIdle()
 
+        // Dev fallback (#101): on api failure, render a sample item carrying the requested id.
         val state = vm.state.value
-        assertIs<DetailUiState.Error>(state)
-        assertEquals("boom", state.message)
+        assertIs<DetailUiState.Content>(state)
+        assertEquals("abc", state.item.id)
     }
 }
