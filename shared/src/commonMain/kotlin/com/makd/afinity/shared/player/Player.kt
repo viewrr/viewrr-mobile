@@ -26,6 +26,9 @@ interface Player {
     fun pause()
     fun seekTo(positionSecs: Long)
     fun release()
+
+    /** Re-publish current position/duration from the backend (the UI polls this each second). */
+    fun refreshState()
 }
 
 /**
@@ -39,7 +42,12 @@ class StubPlayer : Player {
 
     override fun load(url: String, startPositionSecs: Long) {
         _state.update {
-            it.copy(positionSecs = startPositionSecs, isPlaying = false, isBuffering = false)
+            it.copy(
+                positionSecs = startPositionSecs,
+                durationSecs = 600, // fake duration so the progress UI has a range
+                isPlaying = false,
+                isBuffering = false,
+            )
         }
     }
 
@@ -57,5 +65,16 @@ class StubPlayer : Player {
 
     override fun release() {
         _state.update { PlaybackStatus() }
+    }
+
+    override fun refreshState() {
+        // No real backend — advance the position a second at a time while "playing".
+        _state.update {
+            if (it.isPlaying && it.positionSecs < it.durationSecs) {
+                it.copy(positionSecs = it.positionSecs + 1)
+            } else {
+                it
+            }
+        }
     }
 }

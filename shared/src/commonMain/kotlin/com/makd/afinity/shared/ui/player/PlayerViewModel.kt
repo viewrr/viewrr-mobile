@@ -68,6 +68,9 @@ class PlayerViewModel(
 
     fun seekTo(positionSecs: Long) = player.seekTo(positionSecs)
 
+    /** Re-read position/duration from the player (UI polls this each second). */
+    fun refresh() = player.refreshState()
+
     override fun onCleared() {
         player.release()
         super.onCleared()
