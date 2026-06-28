@@ -1,9 +1,9 @@
 ---
 project: viewrr-mobile
-phase: execute
+phase: complete
 mode: algorithm
 effort: E4
-updated: 2026-06-24
+updated: 2026-06-28
 ---
 
 # viewrr-mobile — Compose Multiplatform Migration
@@ -83,6 +83,18 @@ Stage4-iosApp+api | ISC-11,12 | Stage3 | no (#100/#101)
   Forge/Anvil/codex unavailable this env (no API keys); Stage 1 done by hand.
 
 ## Changelog
+- 2026-06-28 COMPLETE: AFinity → Compose Multiplatform / viewrr migration done and released to
+  master (PR #5). Both platforms run the shared app end-to-end. Delivered: CMP scaffold + Koin
+  (Hilt removed); viewrr Ktor data layer (Jellyfin replaced); commonMain UI (login →
+  Home/Search/Library/History/Settings + Detail/Series/Player overlays, Apple-TV theme + card
+  focus, Coil, persisted token); real players (ExoPlayer + media3-hls on Android, AVPlayer on iOS)
+  with progress/seek controls; Jellyfin stack retired (~467 .kt + native libs + ~229 res files
+  gone, :app = 3 files). Tests: 34 commonTest + Android instrumented + iOS smoke; CI runs JVM +
+  iOS-native (Xcode 26) on every PR; git flow (master/develop/feature, 6+ PRs). Media playback
+  verified on the Android emulator (real HLS). Remaining is external: live viewrr Hub + creds,
+  Keycloak (#112-115), and backend 🔜 endpoints (/home/top, /home/featured, /media/{id},
+  /playback/{mediaId}). Dev fallbacks (SampleData home/detail/stream) marked for removal with #101.
+
 - 2026-06-25 conjecture: Stage 2 (move domain/VM/UI → commonMain) follows Stage 1 directly.
   refuted-by: coupling scan — domain models are Jellyfin SDK DTOs (40 sdk imports) + Room
   @Entity classes, depended on pervasively (repos → VMs → UI). jellyfin-sdk is not KMP and

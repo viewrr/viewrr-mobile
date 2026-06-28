@@ -47,7 +47,12 @@ class PlayerViewModel(
                             PlayerUiState.Ready(resolve)
                         },
                         onFailure = {
-                            PlayerUiState.Error(it.message ?: "Failed to resolve playback")
+                            // ponytail: no backend /playback/{id} yet — fall back to a dev
+                            // sample stream so the player is exercisable. Remove with #101.
+                            val resolve = com.makd.afinity.shared.viewrr.SampleData.samplePlayback
+                            player.load(resolve.url, resolve.startPositionSecs)
+                            player.play()
+                            PlayerUiState.Ready(resolve)
                         },
                     )
         }
@@ -62,6 +67,9 @@ class PlayerViewModel(
     }
 
     fun seekTo(positionSecs: Long) = player.seekTo(positionSecs)
+
+    /** Re-read position/duration from the player (UI polls this each second). */
+    fun refresh() = player.refreshState()
 
     override fun onCleared() {
         player.release()

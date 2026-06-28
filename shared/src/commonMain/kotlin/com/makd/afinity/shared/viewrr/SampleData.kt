@@ -24,4 +24,21 @@ internal object SampleData {
             listOf(item("12", "Andor", 2022), item("13", "The Last of Us", 2023), item("14", "House of the Dragon", 2022)),
         ),
     )
+
+    // ponytail: dev detail fallback so the screen renders (incl. Play) before /media/{id} exists.
+    fun sampleDetail(id: String) = MediaItem(
+        id = id,
+        title = "Sample Title",
+        cleanTitle = "Sample Title",
+        year = 2024,
+        durationSecs = 600,
+        contentRating = "PG-13",
+        overview = "Dev sample — no backend wired yet. Press Play to test the player against a public HLS stream.",
+    )
+
+    // ponytail: dev-only public HLS so the player works before /playback/{id} exists. Remove with #101.
+    val samplePlayback = PlaybackResolve(
+        url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        type = "hls",
+    )
 }

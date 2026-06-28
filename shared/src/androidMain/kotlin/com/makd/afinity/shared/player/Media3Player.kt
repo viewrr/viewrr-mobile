@@ -42,4 +42,5 @@ class Media3Player(context: Context) : Player {
     override fun pause() = exo.pause()
     override fun seekTo(positionSecs: Long) = exo.seekTo(positionSecs * 1000)
     override fun release() = exo.release()
+    override fun refreshState() = sync()
 }
