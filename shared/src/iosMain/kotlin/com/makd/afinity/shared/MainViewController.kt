@@ -21,9 +21,9 @@ fun initKoin() {
     if (koinStarted) return
     koinStarted = true
     startKoin {
-        // iOS simulator shares the host network; localhost reaches the dev Hub.
+        // ponytail: live Hub hardcoded; split debug/release base URL when a staging env exists.
         modules(
-            viewrrModule(baseUrl = "http://localhost:8080"),
+            viewrrModule(baseUrl = "https://api.viewrr.stream"),
             searchModule,
             detailModule,
             libraryModule,
