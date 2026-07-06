@@ -73,6 +73,50 @@ class AuthViewModelTest {
     }
 
     @Test
+    fun register_blankEmail_emitsErrorWithoutCallingApi() = runTest {
+        val fake = FakeViewrrApi()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
+        val vm = AuthViewModel(fake, session)
+
+        vm.register("alice", "secret", "")
+        advanceUntilIdle()
+
+        val state = vm.state.value
+        assertIs<LoginUiState.Error>(state)
+        assertEquals("Enter an email address", state.message)
+        assertFalse(session.isLoggedIn.value)
+        assertEquals(null, fake.lastRegister)
+    }
+
+    @Test
+    fun register_success_sendsEmailAndSetsTokens() = runTest {
+        val fake = FakeViewrrApi(loginTokens = AuthTokens(token = "acc", refreshToken = "ref"))
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
+        val vm = AuthViewModel(fake, session)
+
+        vm.register("alice", "secret", "alice@example.com")
+        advanceUntilIdle()
+
+        assertTrue(session.isLoggedIn.value)
+        assertEquals("acc", session.token)
+        assertEquals("ref", session.refreshToken)
+        assertEquals(Triple("alice", "secret", "alice@example.com"), fake.lastRegister)
+    }
+
+    @Test
+    fun register_blankUsername_emitsErrorWithoutCallingApi() = runTest {
+        val fake = FakeViewrrApi()
+        val session = SessionStore(com.russhwolf.settings.MapSettings())
+        val vm = AuthViewModel(fake, session)
+
+        vm.register("", "secret", "alice@example.com")
+        advanceUntilIdle()
+
+        assertIs<LoginUiState.Error>(vm.state.value)
+        assertEquals(null, fake.lastRegister)
+    }
+
+    @Test
     fun continueOffline_setsLoggedIn() = runTest {
         val session = SessionStore(com.russhwolf.settings.MapSettings())
         val vm = AuthViewModel(FakeViewrrApi(), session)

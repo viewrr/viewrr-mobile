@@ -9,6 +9,7 @@ package com.makd.afinity.shared.viewrr
 interface ViewrrApi {
     // Auth
     suspend fun login(username: String, password: String): AuthTokens
+    suspend fun register(username: String, password: String, email: String): AuthTokens
     suspend fun refresh(): AuthTokens
     suspend fun logout()
     suspend fun stremioKey(): StremioKey

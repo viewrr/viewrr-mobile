@@ -16,7 +16,13 @@ fun viewrrModule(baseUrl: String): Module = module {
     single { SessionStore(Settings()) }
     single<ViewrrApi> {
         val session = get<SessionStore>()
-        ViewrrClient(baseUrl) { session.token }
+        ViewrrClient(
+            baseUrl = baseUrl,
+            tokenProvider = { session.token },
+            refreshTokenProvider = { session.refreshToken },
+            onTokensRefreshed = { session.setTokens(it.token, it.refreshToken ?: session.refreshToken) },
+            onAuthCleared = { session.clear() },
+        )
     }
     single<MediaRepository> { ViewrrMediaRepository(get()) }
     viewModelOf(::HomeViewModel)
