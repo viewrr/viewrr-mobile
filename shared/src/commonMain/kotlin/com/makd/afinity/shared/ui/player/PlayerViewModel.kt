@@ -2,9 +2,11 @@ package com.makd.afinity.shared.ui.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.makd.afinity.shared.isDebugBuild
 import com.makd.afinity.shared.player.PlaybackStatus
 import com.makd.afinity.shared.player.Player
 import com.makd.afinity.shared.viewrr.PlaybackResolve
+import com.makd.afinity.shared.viewrr.SampleData
 import com.makd.afinity.shared.viewrr.ViewrrApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +26,7 @@ sealed interface PlayerUiState {
 class PlayerViewModel(
     private val api: ViewrrApi,
     private val player: Player,
+    private val debug: Boolean = isDebugBuild,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<PlayerUiState>(PlayerUiState.Loading)
@@ -46,13 +49,18 @@ class PlayerViewModel(
                             player.play()
                             PlayerUiState.Ready(resolve)
                         },
-                        onFailure = {
-                            // ponytail: no backend /playback/{id} yet — fall back to a dev
-                            // sample stream so the player is exercisable. Remove with #101.
-                            val resolve = com.makd.afinity.shared.viewrr.SampleData.samplePlayback
-                            player.load(resolve.url, resolve.startPositionSecs)
-                            player.play()
-                            PlayerUiState.Ready(resolve)
+                        onFailure = { e ->
+                            // #102: surface the real failure in release. Only fall back to a dev
+                            // sample stream in debug builds so the player stays exercisable
+                            // before /playback/{id} lands.
+                            if (debug) {
+                                val resolve = SampleData.samplePlayback
+                                player.load(resolve.url, resolve.startPositionSecs)
+                                player.play()
+                                PlayerUiState.Ready(resolve)
+                            } else {
+                                PlayerUiState.Error(e.message ?: "Failed to load stream")
+                            }
                         },
                     )
         }

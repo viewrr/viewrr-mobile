@@ -13,6 +13,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -47,15 +48,32 @@ class PlayerViewModelTest {
     }
 
     @Test
-    fun start_failure_fallsBackToSampleStream() = runTest {
+    fun start_failure_emitsErrorWhenFlagOff() = runTest {
         val fake = FakeViewrrApi(error = RuntimeException("boom"))
         val player = StubPlayer()
-        val vm = PlayerViewModel(fake, player)
+        val vm = PlayerViewModel(fake, player, debug = false)
 
         vm.start("abc")
         advanceUntilIdle()
 
-        // Dev fallback (#101): on resolve failure, play the sample stream instead of erroring.
+        // #102: in release a failed playback resolve must surface as an error, not silently
+        // play an unrelated public test stream.
+        val state = vm.state.value
+        assertIs<PlayerUiState.Error>(state)
+        assertEquals("boom", state.message)
+        assertFalse(player.state.value.isPlaying)
+    }
+
+    @Test
+    fun start_failure_fallsBackToSampleStreamWhenFlagOn() = runTest {
+        val fake = FakeViewrrApi(error = RuntimeException("boom"))
+        val player = StubPlayer()
+        val vm = PlayerViewModel(fake, player, debug = true)
+
+        vm.start("abc")
+        advanceUntilIdle()
+
+        // Debug-only fallback (#102): on resolve failure, play the sample stream instead of erroring.
         val state = vm.state.value
         assertIs<PlayerUiState.Ready>(state)
         assertTrue(player.state.value.isPlaying)

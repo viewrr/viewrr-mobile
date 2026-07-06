@@ -2,7 +2,9 @@ package com.makd.afinity.shared.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.makd.afinity.shared.isDebugBuild
 import com.makd.afinity.shared.viewrr.MediaItem
+import com.makd.afinity.shared.viewrr.SampleData
 import com.makd.afinity.shared.viewrr.ViewrrApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +18,10 @@ sealed interface DetailUiState {
 }
 
 /** commonMain ViewModel — drives the media detail screen from the viewrr client (#101). */
-class DetailViewModel(private val api: ViewrrApi) : ViewModel() {
+class DetailViewModel(
+    private val api: ViewrrApi,
+    private val debug: Boolean = isDebugBuild,
+) : ViewModel() {
 
     private val _state = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
     val state: StateFlow<DetailUiState> = _state.asStateFlow()
@@ -28,11 +33,11 @@ class DetailViewModel(private val api: ViewrrApi) : ViewModel() {
                 runCatching { api.mediaDetail(id) }
                     .fold(
                         onSuccess = { DetailUiState.Content(it) },
-                        // ponytail: dev fallback so detail renders before /media/{id} exists. Remove with #101.
-                        onFailure = {
-                            DetailUiState.Content(
-                                com.makd.afinity.shared.viewrr.SampleData.sampleDetail(id),
-                            )
+                        // #102: surface the real failure in release. Only fall back to a sample
+                        // detail in debug builds so the screen is exercisable before /media/{id} lands.
+                        onFailure = { e ->
+                            if (debug) DetailUiState.Content(SampleData.sampleDetail(id))
+                            else DetailUiState.Error(e.message ?: "Failed to load")
                         },
                     )
         }
