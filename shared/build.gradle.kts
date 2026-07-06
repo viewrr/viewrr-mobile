@@ -14,7 +14,7 @@ kotlin {
         // because the `android` alias collides on some 9.2.x patch builds. Revisit on AGP 9.3.
         namespace = "com.makd.afinity.shared"
         compileSdk = 36
-        minSdk = 35
+        minSdk = 24
         compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
         // Run commonTest as JVM host unit tests (CI uses this — no iOS/CMP link needed).
         withHostTest {}
