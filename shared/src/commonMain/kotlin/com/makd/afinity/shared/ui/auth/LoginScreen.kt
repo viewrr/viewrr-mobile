@@ -31,8 +31,12 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
+    var isRegister by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+
+    val loading = state is LoginUiState.Loading
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
@@ -51,6 +55,16 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
+            if (isRegister) {
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -64,15 +78,24 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
                 Text(it.message, color = MaterialTheme.colorScheme.error)
             }
             Button(
-                onClick = { viewModel.login(username, password) },
-                enabled = state !is LoginUiState.Loading,
+                onClick = {
+                    if (isRegister) viewModel.register(username, password, email)
+                    else viewModel.login(username, password)
+                },
+                enabled = !loading,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                if (state is LoginUiState.Loading) {
+                if (loading) {
                     CircularProgressIndicator(modifier = Modifier.size(20.dp))
                 } else {
-                    Text("Sign in")
+                    Text(if (isRegister) "Create account" else "Sign in")
                 }
+            }
+            TextButton(onClick = { isRegister = !isRegister }, enabled = !loading) {
+                Text(
+                    if (isRegister) "Have an account? Sign in"
+                    else "New here? Create an account",
+                )
             }
             // ponytail: dev-only — browse UI offline before a Hub/Keycloak exists.
             TextButton(onClick = { viewModel.continueOffline() }) {
