@@ -23,12 +23,18 @@ class FakeViewrrApi(
 ) : ViewrrApi {
 
     var lastLogin: Pair<String, String>? = null
+    var lastRegister: Triple<String, String, String>? = null
     var reportedEvents: MutableList<WatchEvent> = mutableListOf()
 
     private fun <T> guard(value: T): T = error?.let { throw it } ?: value
 
     override suspend fun login(username: String, password: String): AuthTokens {
         lastLogin = username to password
+        return guard(loginTokens)
+    }
+
+    override suspend fun register(username: String, password: String, email: String): AuthTokens {
+        lastRegister = Triple(username, password, email)
         return guard(loginTokens)
     }
 

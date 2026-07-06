@@ -83,3 +83,11 @@ data class AuthTokens(
 
 @Serializable
 data class LoginRequest(val username: String, val password: String)
+
+/** POST /auth/register — email is REQUIRED by the backend (400 without it). */
+@Serializable
+data class RegisterRequest(val username: String, val password: String, val email: String)
+
+/** POST /auth/refresh — carries the persisted refresh token. */
+@Serializable
+data class RefreshRequest(val refreshToken: String)

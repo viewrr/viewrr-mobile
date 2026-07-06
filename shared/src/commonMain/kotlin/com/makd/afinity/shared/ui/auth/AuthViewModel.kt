@@ -35,8 +35,27 @@ class AuthViewModel(
         _state.value = LoginUiState.Loading
         viewModelScope.launch {
             runCatching { api.login(username.trim(), password) }
-                .onSuccess { session.setToken(it.token) } // SessionStore flips App() to the nav shell
+                // Persist BOTH tokens so refresh works; SessionStore flips App() to the nav shell.
+                .onSuccess { session.setTokens(it.token, it.refreshToken) }
                 .onFailure { _state.value = LoginUiState.Error(it.message ?: "Login failed") }
+        }
+    }
+
+    /** Sign up against POST /auth/register. email is REQUIRED by the backend (400 without it). */
+    fun register(username: String, password: String, email: String) {
+        if (username.isBlank() || password.isBlank()) {
+            _state.value = LoginUiState.Error("Enter username and password")
+            return
+        }
+        if (email.isBlank()) {
+            _state.value = LoginUiState.Error("Enter an email address")
+            return
+        }
+        _state.value = LoginUiState.Loading
+        viewModelScope.launch {
+            runCatching { api.register(username.trim(), password, email.trim()) }
+                .onSuccess { session.setTokens(it.token, it.refreshToken) }
+                .onFailure { _state.value = LoginUiState.Error(it.message ?: "Registration failed") }
         }
     }
 }

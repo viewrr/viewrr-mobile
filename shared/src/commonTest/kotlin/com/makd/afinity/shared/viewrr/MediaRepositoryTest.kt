@@ -27,25 +27,37 @@ class MediaRepositoryTest {
     }
 
     @Test
-    fun homeRows_fallsBackToSampleDataWhenAllEndpointsEmpty() = runTest {
+    fun homeRows_returnsEmptyWhenAllEndpointsEmptyAndFlagOff() = runTest {
         val api = FakeViewrrApi() // all lists default to emptyList()
-        val repo = ViewrrMediaRepository(api)
+        val repo = ViewrrMediaRepository(api, debug = false)
 
         val rows = repo.homeRows()
 
-        assertEquals(SampleData.homeRows, rows)
+        // #102: in release (flag off) a broken/empty backend must surface as empty rows,
+        // not fake sample content that masks the failure as "working".
+        assertEquals(emptyList(), rows)
     }
 
     @Test
-    fun homeRows_fallsBackToSampleDataWhenApiErrors() = runTest {
+    fun homeRows_returnsEmptyWhenApiErrorsAndFlagOff() = runTest {
         val api = FakeViewrrApi(error = RuntimeException("backend down"))
-        val repo = ViewrrMediaRepository(api)
+        val repo = ViewrrMediaRepository(api, debug = false)
 
         val rows = repo.homeRows()
 
-        // Each row's runCatching swallows the error, leaving the aggregate empty,
-        // so the repository falls back to the sample rows.
-        assertTrue(rows.isNotEmpty(), "expected non-empty fallback rows")
+        // Each row's runCatching swallows the error, leaving the aggregate empty; with the
+        // debug flag off the repository does NOT substitute sample rows.
+        assertEquals(emptyList(), rows)
+    }
+
+    @Test
+    fun homeRows_fallsBackToSampleDataWhenAllEndpointsEmptyAndFlagOn() = runTest {
+        val api = FakeViewrrApi() // all lists default to emptyList()
+        val repo = ViewrrMediaRepository(api, debug = true)
+
+        val rows = repo.homeRows()
+
+        // Debug-only convenience so the home renders before the backend lands (#102).
         assertEquals(SampleData.homeRows, rows)
     }
 

@@ -14,7 +14,7 @@ actual fun VideoSurface(player: Player, modifier: Modifier) {
         modifier = modifier,
         factory = { ctx ->
             PlayerView(ctx).apply {
-                useController = true
+                useController = false
                 this.player = media3.exo
             }
         },
