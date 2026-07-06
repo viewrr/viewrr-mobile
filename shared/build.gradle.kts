@@ -45,6 +45,9 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
+            // #142 self-custody identity core: pure-Kotlin SHA-256 + HMAC-SHA512 (BIP39/PBKDF2).
+            implementation(libs.kotlincrypto.sha2)
+            implementation(libs.kotlincrypto.hmac.sha2)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
@@ -52,9 +55,13 @@ kotlin {
             implementation(libs.androidx.media3.exoplayer)
             implementation(libs.androidx.media3.exoplayer.hls)
             implementation(libs.androidx.media3.ui)
+            // #142 identity: Ed25519 (RFC 8032) for Android + JVM host tests.
+            implementation(libs.bouncycastle.prov)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            // #142 identity: Ed25519 via libsodium — the exact server/worklet crypto stack.
+            implementation(libs.libsodium.bindings)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
