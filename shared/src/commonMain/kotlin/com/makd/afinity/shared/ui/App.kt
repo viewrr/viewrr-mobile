@@ -19,6 +19,7 @@ import com.makd.afinity.shared.ui.detail.DetailScreen
 import com.makd.afinity.shared.ui.history.HistoryScreen
 import com.makd.afinity.shared.ui.home.HomeScreen
 import com.makd.afinity.shared.ui.library.LibraryScreen
+import com.makd.afinity.shared.ui.onboarding.OnboardingScreen
 import com.makd.afinity.shared.ui.player.PlayerScreen
 import com.makd.afinity.shared.ui.search.SearchScreen
 import com.makd.afinity.shared.ui.series.SeriesScreen
@@ -43,7 +44,17 @@ fun App() {
         val session = koinInject<SessionStore>()
         val loggedIn by session.isLoggedIn.collectAsState()
         if (!loggedIn) {
-            LoginScreen()
+            // Self-custody onboarding lives in front of the login gate; existing username/password
+            // login is untouched. Onboarding stores the encrypted identity, then returns to login.
+            var showOnboarding by remember { mutableStateOf(false) }
+            if (showOnboarding) {
+                OnboardingScreen(
+                    onDone = { showOnboarding = false },
+                    onBack = { showOnboarding = false },
+                )
+            } else {
+                LoginScreen(onCreateIdentity = { showOnboarding = true })
+            }
             return@ViewrrTheme
         }
 
