@@ -29,7 +29,10 @@ import androidx.compose.ui.unit.dp
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
+fun LoginScreen(
+    onCreateIdentity: () -> Unit = {},
+    viewModel: AuthViewModel = koinViewModel(),
+) {
     val state by viewModel.state.collectAsState()
     var isRegister by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("") }
@@ -96,6 +99,9 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel()) {
                     if (isRegister) "Have an account? Sign in"
                     else "New here? Create an account",
                 )
+            }
+            TextButton(onClick = onCreateIdentity, enabled = !loading) {
+                Text("Create a self-custody identity")
             }
             // ponytail: dev-only — browse UI offline before a Hub/Keycloak exists.
             TextButton(onClick = { viewModel.continueOffline() }) {

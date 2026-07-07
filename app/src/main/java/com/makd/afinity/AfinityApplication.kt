@@ -1,10 +1,12 @@
 package com.makd.afinity
 
 import android.app.Application
+import com.makd.afinity.shared.identity.vault.androidVaultModule
 import com.makd.afinity.shared.player.androidPlayerModule
 import com.makd.afinity.shared.ui.detail.detailModule
 import com.makd.afinity.shared.ui.history.historyModule
 import com.makd.afinity.shared.ui.library.libraryModule
+import com.makd.afinity.shared.ui.onboarding.onboardingModule
 import com.makd.afinity.shared.ui.player.playerModule
 import com.makd.afinity.shared.ui.search.searchModule
 import com.makd.afinity.shared.ui.series.seriesModule
@@ -25,7 +27,8 @@ class AfinityApplication : Application() {
                 viewrrModule(baseUrl = "https://api.viewrr.stream"),
                 searchModule, detailModule, libraryModule,
                 playerModule, settingsModule, historyModule, seriesModule,
-                androidPlayerModule,
+                onboardingModule,
+                androidPlayerModule, androidVaultModule,
             )
         }
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
