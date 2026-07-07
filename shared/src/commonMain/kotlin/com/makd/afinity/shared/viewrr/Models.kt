@@ -91,3 +91,23 @@ data class RegisterRequest(val username: String, val password: String, val email
 /** POST /auth/refresh — carries the persisted refresh token. */
 @Serializable
 data class RefreshRequest(val refreshToken: String)
+
+/**
+ * Read-only wallet surface for the opt-in payments feature (p2p-0020 / #3). Contract PINNED
+ * against mesh-hub's `/api/pay/wallet` routes:
+ *  - `POST /api/pay/wallet/opt-in` -> `{"address":"0x...","optedIn":true}` (idempotent).
+ *  - `GET /api/pay/wallet` opted in -> `{"address":"0x...","balanceBaseUnits":"1500000",
+ *    "asset":"USDC","decimals":6,"optedIn":true}`; not opted in -> `{"optedIn":false}`.
+ * [balanceBaseUnits] is the raw on-chain integer as a STRING (avoids float precision loss),
+ * scaled by [decimals] (USDC = 6, i.e. 1 USDC = "1000000"). [address]/[balanceBaseUnits]/
+ * [asset]/[decimals] are absent when [optedIn] is false. No signing / send fields here by
+ * design — this slice is derive+display only (legal #9 open).
+ */
+@Serializable
+data class WalletInfo(
+    val optedIn: Boolean,
+    val address: String? = null,
+    val balanceBaseUnits: String? = null,
+    val asset: String? = null,
+    val decimals: Int? = null,
+)

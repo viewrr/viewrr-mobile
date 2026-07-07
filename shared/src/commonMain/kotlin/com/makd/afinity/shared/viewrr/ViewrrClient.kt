@@ -172,4 +172,12 @@ class ViewrrClient(
 
     override suspend fun subtitles(mediaId: String): List<Subtitle> =
         authed { client.get("media/${mediaId.encodeURLPathPart()}/subtitles").body() }
+
+    // ---- Payments — opt-in wallet (p2p-0020 / #3) ----
+
+    override suspend fun walletOptIn(): WalletInfo =
+        authed { client.post("api/pay/wallet/opt-in").body() }
+
+    override suspend fun walletInfo(): WalletInfo =
+        authed { client.get("api/pay/wallet").body() }
 }

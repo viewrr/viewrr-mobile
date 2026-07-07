@@ -37,4 +37,9 @@ interface ViewrrApi {
     // Playback
     suspend fun playbackResolve(mediaId: String): PlaybackResolve // 🔜 GET /playback/{mediaId}
     suspend fun subtitles(mediaId: String): List<Subtitle>
+
+    // Payments — opt-in wallet (p2p-0020 / #3). Read-only: derive + display, no money movement.
+    // Contract PINNED (mesh-hub implementing): docs/api/client-api.md `/api/pay/wallet/*`.
+    suspend fun walletOptIn(): WalletInfo // POST /api/pay/wallet/opt-in — idempotent; provisions if absent
+    suspend fun walletInfo(): WalletInfo // GET /api/pay/wallet — check .optedIn; false until opted in
 }

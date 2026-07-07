@@ -7,6 +7,7 @@ import com.makd.afinity.shared.ui.detail.detailModule
 import com.makd.afinity.shared.ui.history.historyModule
 import com.makd.afinity.shared.ui.library.libraryModule
 import com.makd.afinity.shared.ui.onboarding.onboardingModule
+import com.makd.afinity.shared.ui.payments.paymentsModule
 import com.makd.afinity.shared.ui.player.playerModule
 import com.makd.afinity.shared.ui.search.searchModule
 import com.makd.afinity.shared.ui.series.seriesModule
@@ -27,7 +28,7 @@ class AfinityApplication : Application() {
                 viewrrModule(baseUrl = "https://api.viewrr.stream"),
                 searchModule, detailModule, libraryModule,
                 playerModule, settingsModule, historyModule, seriesModule,
-                onboardingModule,
+                onboardingModule, paymentsModule,
                 androidPlayerModule, androidVaultModule,
             )
         }

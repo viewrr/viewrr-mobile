@@ -20,11 +20,14 @@ class FakeViewrrApi(
     var watchEvents: List<WatchEvent> = emptyList(),
     var playback: PlaybackResolve = PlaybackResolve(url = "https://stream/x.m3u8"),
     var stremio: StremioKey = StremioKey(key = "k"),
+    var wallet: WalletInfo = WalletInfo(optedIn = false),
 ) : ViewrrApi {
 
     var lastLogin: Pair<String, String>? = null
     var lastRegister: Triple<String, String, String>? = null
     var reportedEvents: MutableList<WatchEvent> = mutableListOf()
+    var walletOptInCalls: Int = 0
+    var walletInfoCalls: Int = 0
 
     private fun <T> guard(value: T): T = error?.let { throw it } ?: value
 
@@ -62,4 +65,18 @@ class FakeViewrrApi(
     override suspend fun watchEventsMe(): List<WatchEvent> = guard(watchEvents)
     override suspend fun playbackResolve(mediaId: String): PlaybackResolve = guard(playback)
     override suspend fun subtitles(mediaId: String): List<Subtitle> = guard(emptyList())
+
+    override suspend fun walletOptIn(): WalletInfo {
+        walletOptInCalls++
+        wallet = wallet.copy(
+            optedIn = true,
+            address = wallet.address ?: "0xtest",
+        )
+        return guard(wallet)
+    }
+
+    override suspend fun walletInfo(): WalletInfo {
+        walletInfoCalls++
+        return guard(wallet)
+    }
 }

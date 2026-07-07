@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.makd.afinity.shared.ui.payments.PaymentsScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 /** Settings screen — read-only account info + a prominent logout action. commonMain-safe Material3. */
@@ -45,6 +46,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = koinViewModel()) {
             SettingsRow(label = "Server", value = "viewrr Hub (not configured)")
             HorizontalDivider()
             SettingsRow(label = "Version", value = "0.9.3-beta")
+            HorizontalDivider()
+            PaymentsScreen()
 
             Button(
                 onClick = viewModel::logout,
